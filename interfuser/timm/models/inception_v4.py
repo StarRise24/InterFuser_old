@@ -342,7 +342,7 @@ def _create_inception_v4(variant, pretrained=False, **kwargs):
         pretrained,
         default_cfg=default_cfgs[variant],
         feature_cfg=dict(flatten_sequential=True),
-        **kwargs
+        **kwargs,
     )
 
 

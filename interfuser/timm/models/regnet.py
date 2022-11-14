@@ -227,7 +227,7 @@ class Bottleneck(nn.Module):
             stride=stride,
             dilation=dilation,
             groups=groups,
-            **cargs
+            **cargs,
         )
         if se_ratio:
             se_channels = int(round(in_chs * se_ratio))
@@ -345,7 +345,7 @@ class RegStage(nn.Module):
                     downsample=proj_block,
                     drop_block=drop_block,
                     drop_path=drop_path,
-                    **block_kwargs
+                    **block_kwargs,
                 ),
             )
 
@@ -520,7 +520,7 @@ def _create_regnet(variant, pretrained, **kwargs):
         default_cfg=default_cfgs[variant],
         model_cfg=model_cfgs[variant],
         pretrained_filter_fn=_filter_fn,
-        **kwargs
+        **kwargs,
     )
 
 

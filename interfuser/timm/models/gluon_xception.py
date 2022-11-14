@@ -316,7 +316,7 @@ def _create_gluon_xception(variant, pretrained=False, **kwargs):
         pretrained,
         default_cfg=default_cfgs[variant],
         feature_cfg=dict(feature_cls="hook"),
-        **kwargs
+        **kwargs,
     )
 
 

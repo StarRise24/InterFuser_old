@@ -1,7 +1,6 @@
 import os
 
 from .dataset import IterableImageDataset, ImageDataset
-from .carla_dataset import CarlaMVDetDataset
 
 
 def _search_split(root, split):
@@ -24,7 +23,7 @@ def create_dataset(
     search_split=True,
     is_training=False,
     batch_size=None,
-    **kwargs
+    **kwargs,
 ):
     name = name.lower()
     if name.startswith("tfds"):
@@ -34,7 +33,7 @@ def create_dataset(
             split=split,
             is_training=is_training,
             batch_size=batch_size,
-            **kwargs
+            **kwargs,
         )
     else:
         # FIXME support more advance split cfg for ImageFolder/Tar datasets in the future
@@ -44,12 +43,4 @@ def create_dataset(
         if search_split and os.path.isdir(root):
             root = _search_split(root, split)
         ds = ImageDataset(root, parser=name, **kwargs)
-    return ds
-
-
-def create_carla_dataset(
-    name, root, towns, weathers=None, waypoints_seq_len=5, batch_size=None, **kwargs
-):
-    if name == "carla":
-        ds = CarlaMVDetDataset(root, towns, weathers, "det", **kwargs)
     return ds

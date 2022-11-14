@@ -30,7 +30,7 @@ def create_model(
     scriptable=None,
     exportable=None,
     no_jit=None,
-    **kwargs
+    **kwargs,
 ):
     """Create a model
 

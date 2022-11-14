@@ -33,7 +33,7 @@ class MixedConv2d(nn.ModuleDict):
         padding="",
         dilation=1,
         depthwise=False,
-        **kwargs
+        **kwargs,
     ):
         super(MixedConv2d, self).__init__()
 
@@ -58,7 +58,7 @@ class MixedConv2d(nn.ModuleDict):
                     padding=padding,
                     dilation=dilation,
                     groups=conv_groups,
-                    **kwargs
+                    **kwargs,
                 ),
             )
         self.splits = in_splits

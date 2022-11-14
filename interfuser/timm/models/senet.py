@@ -535,7 +535,7 @@ def legacy_senet154(pretrained=False, **kwargs):
         downsample_padding=1,
         inplanes=128,
         input_3x3=True,
-        **kwargs
+        **kwargs,
     )
     return _create_senet("legacy_senet154", pretrained, **model_args)
 
@@ -547,7 +547,7 @@ def legacy_seresnext26_32x4d(pretrained=False, **kwargs):
         layers=[2, 2, 2, 2],
         groups=32,
         reduction=16,
-        **kwargs
+        **kwargs,
     )
     return _create_senet("legacy_seresnext26_32x4d", pretrained, **model_args)
 
@@ -559,7 +559,7 @@ def legacy_seresnext50_32x4d(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         groups=32,
         reduction=16,
-        **kwargs
+        **kwargs,
     )
     return _create_senet("legacy_seresnext50_32x4d", pretrained, **model_args)
 
@@ -571,6 +571,6 @@ def legacy_seresnext101_32x4d(pretrained=False, **kwargs):
         layers=[3, 4, 23, 3],
         groups=32,
         reduction=16,
-        **kwargs
+        **kwargs,
     )
     return _create_senet("legacy_seresnext101_32x4d", pretrained, **model_args)

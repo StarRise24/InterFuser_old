@@ -351,7 +351,7 @@ def _create_selecsls(variant, pretrained, **kwargs):
         default_cfg=default_cfgs[variant],
         model_cfg=cfg,
         feature_cfg=dict(out_indices=(0, 1, 2, 3, 4), flatten_sequential=True),
-        **kwargs
+        **kwargs,
     )
 
 

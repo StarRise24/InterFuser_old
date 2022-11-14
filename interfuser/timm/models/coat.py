@@ -430,7 +430,7 @@ class CoaT(nn.Module):
         return_interm_layers=False,
         out_features=None,
         crpe_window=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         crpe_window = crpe_window or {3: 2, 5: 3, 7: 3}
@@ -814,7 +814,7 @@ def _create_coat(variant, pretrained=False, default_cfg=None, **kwargs):
         pretrained,
         default_cfg=default_cfgs[variant],
         pretrained_filter_fn=checkpoint_filter_fn,
-        **kwargs
+        **kwargs,
     )
     return model
 
@@ -828,7 +828,7 @@ def coat_tiny(pretrained=False, **kwargs):
         parallel_depth=6,
         num_heads=8,
         mlp_ratios=[4, 4, 4, 4],
-        **kwargs
+        **kwargs,
     )
     model = _create_coat("coat_tiny", pretrained=pretrained, **model_cfg)
     return model
@@ -843,7 +843,7 @@ def coat_mini(pretrained=False, **kwargs):
         parallel_depth=6,
         num_heads=8,
         mlp_ratios=[4, 4, 4, 4],
-        **kwargs
+        **kwargs,
     )
     model = _create_coat("coat_mini", pretrained=pretrained, **model_cfg)
     return model
@@ -858,7 +858,7 @@ def coat_lite_tiny(pretrained=False, **kwargs):
         parallel_depth=0,
         num_heads=8,
         mlp_ratios=[8, 8, 4, 4],
-        **kwargs
+        **kwargs,
     )
     model = _create_coat("coat_lite_tiny", pretrained=pretrained, **model_cfg)
     return model
@@ -873,7 +873,7 @@ def coat_lite_mini(pretrained=False, **kwargs):
         parallel_depth=0,
         num_heads=8,
         mlp_ratios=[8, 8, 4, 4],
-        **kwargs
+        **kwargs,
     )
     model = _create_coat("coat_lite_mini", pretrained=pretrained, **model_cfg)
     return model
@@ -888,7 +888,7 @@ def coat_lite_small(pretrained=False, **kwargs):
         parallel_depth=0,
         num_heads=8,
         mlp_ratios=[8, 8, 4, 4],
-        **kwargs
+        **kwargs,
     )
     model = _create_coat("coat_lite_small", pretrained=pretrained, **model_cfg)
     return model

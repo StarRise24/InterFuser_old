@@ -201,7 +201,7 @@ def _create_vision_transformer_hybrid(variant, backbone, pretrained=False, **kwa
         pretrained=pretrained,
         embed_layer=embed_layer,
         default_cfg=default_cfgs[variant],
-        **kwargs
+        **kwargs,
     )
 
 
@@ -243,7 +243,7 @@ def vit_tiny_r_s16_p8_224(pretrained=False, **kwargs):
         "vit_tiny_r_s16_p8_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -257,7 +257,7 @@ def vit_tiny_r_s16_p8_384(pretrained=False, **kwargs):
         "vit_tiny_r_s16_p8_384",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -271,7 +271,7 @@ def vit_small_r26_s32_224(pretrained=False, **kwargs):
         "vit_small_r26_s32_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -285,7 +285,7 @@ def vit_small_r26_s32_384(pretrained=False, **kwargs):
         "vit_small_r26_s32_384",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -340,7 +340,7 @@ def vit_large_r50_s32_224(pretrained=False, **kwargs):
         "vit_large_r50_s32_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -354,7 +354,7 @@ def vit_large_r50_s32_384(pretrained=False, **kwargs):
         "vit_large_r50_s32_384",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -368,7 +368,7 @@ def vit_tiny_r_s16_p8_224_in21k(pretrained=False, **kwargs):
         "vit_tiny_r_s16_p8_224_in21k",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -382,7 +382,7 @@ def vit_small_r26_s32_224_in21k(pretrained=False, **kwargs):
         "vit_small_r26_s32_224_in21k",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -400,7 +400,7 @@ def vit_base_r50_s16_224_in21k(pretrained=False, **kwargs):
         "vit_base_r50_s16_224_in21k",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -420,7 +420,7 @@ def vit_large_r50_s32_224_in21k(pretrained=False, **kwargs):
         "vit_large_r50_s32_224_in21k",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -439,7 +439,7 @@ def vit_small_resnet26d_224(pretrained=False, **kwargs):
         "vit_small_resnet26d_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -458,7 +458,7 @@ def vit_small_resnet50d_s16_224(pretrained=False, **kwargs):
         "vit_small_resnet50d_s16_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -477,7 +477,7 @@ def vit_base_resnet26d_224(pretrained=False, **kwargs):
         "vit_base_resnet26d_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model
 
@@ -496,6 +496,6 @@ def vit_base_resnet50d_224(pretrained=False, **kwargs):
         "vit_base_resnet50d_224",
         backbone=backbone,
         pretrained=pretrained,
-        **model_kwargs
+        **model_kwargs,
     )
     return model

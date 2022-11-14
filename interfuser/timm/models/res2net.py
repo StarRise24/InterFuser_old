@@ -77,7 +77,7 @@ class Bottle2neck(nn.Module):
         act_layer=nn.ReLU,
         norm_layer=None,
         attn_layer=None,
-        **_
+        **_,
     ):
         super(Bottle2neck, self).__init__()
         self.scale = scale
@@ -184,7 +184,7 @@ def res2net50_26w_4s(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         base_width=26,
         block_args=dict(scale=4),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net50_26w_4s", pretrained, **model_args)
 
@@ -200,7 +200,7 @@ def res2net101_26w_4s(pretrained=False, **kwargs):
         layers=[3, 4, 23, 3],
         base_width=26,
         block_args=dict(scale=4),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net101_26w_4s", pretrained, **model_args)
 
@@ -216,7 +216,7 @@ def res2net50_26w_6s(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         base_width=26,
         block_args=dict(scale=6),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net50_26w_6s", pretrained, **model_args)
 
@@ -232,7 +232,7 @@ def res2net50_26w_8s(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         base_width=26,
         block_args=dict(scale=8),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net50_26w_8s", pretrained, **model_args)
 
@@ -248,7 +248,7 @@ def res2net50_48w_2s(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         base_width=48,
         block_args=dict(scale=2),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net50_48w_2s", pretrained, **model_args)
 
@@ -264,7 +264,7 @@ def res2net50_14w_8s(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         base_width=14,
         block_args=dict(scale=8),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2net50_14w_8s", pretrained, **model_args)
 
@@ -281,6 +281,6 @@ def res2next50(pretrained=False, **kwargs):
         base_width=4,
         cardinality=8,
         block_args=dict(scale=4),
-        **kwargs
+        **kwargs,
     )
     return _create_res2net("res2next50", pretrained, **model_args)

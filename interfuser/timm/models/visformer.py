@@ -484,7 +484,7 @@ def visformer_tiny(pretrained=False, **kwargs):
         norm_layer=nn.BatchNorm2d,
         conv_init=True,
         embed_norm=nn.BatchNorm2d,
-        **kwargs
+        **kwargs,
     )
     model = _create_visformer("visformer_tiny", pretrained=pretrained, **model_cfg)
     return model
@@ -504,7 +504,7 @@ def visformer_small(pretrained=False, **kwargs):
         norm_layer=nn.BatchNorm2d,
         conv_init=True,
         embed_norm=nn.BatchNorm2d,
-        **kwargs
+        **kwargs,
     )
     model = _create_visformer("visformer_small", pretrained=pretrained, **model_cfg)
     return model

@@ -93,7 +93,7 @@ class SelectiveKernelBasic(nn.Module):
             stride=stride,
             dilation=first_dilation,
             **conv_kwargs,
-            **sk_kwargs
+            **sk_kwargs,
         )
         conv_kwargs["act_layer"] = None
         self.conv2 = ConvBnAct(
@@ -169,7 +169,7 @@ class SelectiveKernelBottleneck(nn.Module):
             dilation=first_dilation,
             groups=cardinality,
             **conv_kwargs,
-            **sk_kwargs
+            **sk_kwargs,
         )
         conv_kwargs["act_layer"] = None
         self.conv3 = ConvBnAct(width, outplanes, kernel_size=1, **conv_kwargs)
@@ -219,7 +219,7 @@ def skresnet18(pretrained=False, **kwargs):
         layers=[2, 2, 2, 2],
         block_args=dict(sk_kwargs=sk_kwargs),
         zero_init_last_bn=False,
-        **kwargs
+        **kwargs,
     )
     return _create_skresnet("skresnet18", pretrained, **model_args)
 
@@ -237,7 +237,7 @@ def skresnet34(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         block_args=dict(sk_kwargs=sk_kwargs),
         zero_init_last_bn=False,
-        **kwargs
+        **kwargs,
     )
     return _create_skresnet("skresnet34", pretrained, **model_args)
 
@@ -255,7 +255,7 @@ def skresnet50(pretrained=False, **kwargs):
         layers=[3, 4, 6, 3],
         block_args=dict(sk_kwargs=sk_kwargs),
         zero_init_last_bn=False,
-        **kwargs
+        **kwargs,
     )
     return _create_skresnet("skresnet50", pretrained, **model_args)
 
@@ -276,7 +276,7 @@ def skresnet50d(pretrained=False, **kwargs):
         avg_down=True,
         block_args=dict(sk_kwargs=sk_kwargs),
         zero_init_last_bn=False,
-        **kwargs
+        **kwargs,
     )
     return _create_skresnet("skresnet50d", pretrained, **model_args)
 
@@ -294,6 +294,6 @@ def skresnext50_32x4d(pretrained=False, **kwargs):
         base_width=4,
         block_args=dict(sk_kwargs=sk_kwargs),
         zero_init_last_bn=False,
-        **kwargs
+        **kwargs,
     )
     return _create_skresnet("skresnext50_32x4d", pretrained, **model_args)

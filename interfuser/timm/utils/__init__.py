@@ -6,7 +6,6 @@ from .distributed import distribute_bn, reduce_tensor
 from .jit import set_jit_legacy
 from .log import setup_default_logging, FormatterNoInfo
 from .metrics import AverageMeter, accuracy
-from .carla_metrics import l1_accuracy
 from .misc import natural_key, add_bool_arg
 from .model import unwrap_model, get_state_dict
 from .model_ema import ModelEma, ModelEmaV2

@@ -50,7 +50,7 @@ class SplitAttn(nn.Module):
         act_layer=nn.ReLU,
         norm_layer=None,
         drop_block=None,
-        **kwargs
+        **kwargs,
     ):
         super(SplitAttn, self).__init__()
         out_channels = out_channels or in_channels
@@ -74,7 +74,7 @@ class SplitAttn(nn.Module):
             dilation,
             groups=groups * radix,
             bias=bias,
-            **kwargs
+            **kwargs,
         )
         self.bn0 = norm_layer(mid_chs) if norm_layer else nn.Identity()
         self.act0 = act_layer(inplace=True)

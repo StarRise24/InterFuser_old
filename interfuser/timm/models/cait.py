@@ -440,7 +440,7 @@ def _create_cait(variant, pretrained=False, **kwargs):
         pretrained,
         default_cfg=default_cfgs[variant],
         pretrained_filter_fn=checkpoint_filter_fn,
-        **kwargs
+        **kwargs,
     )
     return model
 

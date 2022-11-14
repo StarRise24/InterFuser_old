@@ -1,7 +1,5 @@
-import math
-
 import torch
-from torch.optim.optimizer import Optimizer
+from torch.optim import Optimizer
 
 
 class Nadam(Optimizer):
@@ -36,8 +34,6 @@ class Nadam(Optimizer):
         weight_decay=0,
         schedule_decay=4e-3,
     ):
-        if not 0.0 <= lr:
-            raise ValueError("Invalid learning rate: {}".format(lr))
         defaults = dict(
             lr=lr,
             betas=betas,
@@ -47,7 +43,6 @@ class Nadam(Optimizer):
         )
         super(Nadam, self).__init__(params, defaults)
 
-    @torch.no_grad()
     def step(self, closure=None):
         """Performs a single optimization step.
 
@@ -57,22 +52,21 @@ class Nadam(Optimizer):
         """
         loss = None
         if closure is not None:
-            with torch.enable_grad():
-                loss = closure()
+            loss = closure()
 
         for group in self.param_groups:
             for p in group["params"]:
                 if p.grad is None:
                     continue
-                grad = p.grad
+                grad = p.grad.data
                 state = self.state[p]
 
                 # State initialization
                 if len(state) == 0:
                     state["step"] = 0
                     state["m_schedule"] = 1.0
-                    state["exp_avg"] = torch.zeros_like(p)
-                    state["exp_avg_sq"] = torch.zeros_like(p)
+                    state["exp_avg"] = grad.new().resize_as_(grad).zero_()
+                    state["exp_avg_sq"] = grad.new().resize_as_(grad).zero_()
 
                 # Warming momentum schedule
                 m_schedule = state["m_schedule"]
@@ -82,10 +76,9 @@ class Nadam(Optimizer):
                 eps = group["eps"]
                 state["step"] += 1
                 t = state["step"]
-                bias_correction2 = 1 - beta2**t
 
                 if group["weight_decay"] != 0:
-                    grad = grad.add(p, alpha=group["weight_decay"])
+                    grad = grad.add(group["weight_decay"], p.data)
 
                 momentum_cache_t = beta1 * (1.0 - 0.5 * (0.96 ** (t * schedule_decay)))
                 momentum_cache_t_1 = beta1 * (
@@ -96,21 +89,20 @@ class Nadam(Optimizer):
                 state["m_schedule"] = m_schedule_new
 
                 # Decay the first and second moment running average coefficient
-                exp_avg.mul_(beta1).add_(grad, alpha=1.0 - beta1)
-                exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1.0 - beta2)
+                exp_avg.mul_(beta1).add_(1.0 - beta1, grad)
+                exp_avg_sq.mul_(beta2).addcmul_(1.0 - beta2, grad, grad)
+                exp_avg_sq_prime = exp_avg_sq / (1.0 - beta2**t)
+                denom = exp_avg_sq_prime.sqrt_().add_(eps)
 
-                denom = (exp_avg_sq.sqrt() / math.sqrt(bias_correction2)).add_(eps)
-                p.addcdiv_(
+                p.data.addcdiv_(
+                    -group["lr"] * (1.0 - momentum_cache_t) / (1.0 - m_schedule_new),
                     grad,
                     denom,
-                    value=-group["lr"]
-                    * (1.0 - momentum_cache_t)
-                    / (1.0 - m_schedule_new),
                 )
-                p.addcdiv_(
+                p.data.addcdiv_(
+                    -group["lr"] * momentum_cache_t_1 / (1.0 - m_schedule_next),
                     exp_avg,
                     denom,
-                    value=-group["lr"] * momentum_cache_t_1 / (1.0 - m_schedule_next),
                 )
 
         return loss

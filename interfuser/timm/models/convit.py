@@ -234,7 +234,7 @@ class Block(nn.Module):
         act_layer=nn.GELU,
         norm_layer=nn.LayerNorm,
         use_gpsa=True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.norm1 = norm_layer(dim)
@@ -246,7 +246,7 @@ class Block(nn.Module):
                 qkv_bias=qkv_bias,
                 attn_drop=attn_drop,
                 proj_drop=drop,
-                **kwargs
+                **kwargs,
             )
         else:
             self.attn = MHSA(
@@ -441,7 +441,7 @@ def convit_tiny(pretrained=False, **kwargs):
         embed_dim=48,
         num_heads=4,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        **kwargs
+        **kwargs,
     )
     model = _create_convit(variant="convit_tiny", pretrained=pretrained, **model_args)
     return model
@@ -455,7 +455,7 @@ def convit_small(pretrained=False, **kwargs):
         embed_dim=48,
         num_heads=9,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        **kwargs
+        **kwargs,
     )
     model = _create_convit(variant="convit_small", pretrained=pretrained, **model_args)
     return model
@@ -469,7 +469,7 @@ def convit_base(pretrained=False, **kwargs):
         embed_dim=48,
         num_heads=16,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        **kwargs
+        **kwargs,
     )
     model = _create_convit(variant="convit_base", pretrained=pretrained, **model_args)
     return model

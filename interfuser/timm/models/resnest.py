@@ -219,7 +219,7 @@ def resnest14d(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest14d", pretrained=pretrained, **model_kwargs)
 
@@ -236,7 +236,7 @@ def resnest26d(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest26d", pretrained=pretrained, **model_kwargs)
 
@@ -255,7 +255,7 @@ def resnest50d(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest50d", pretrained=pretrained, **model_kwargs)
 
@@ -274,7 +274,7 @@ def resnest101e(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest101e", pretrained=pretrained, **model_kwargs)
 
@@ -293,7 +293,7 @@ def resnest200e(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest200e", pretrained=pretrained, **model_kwargs)
 
@@ -312,7 +312,7 @@ def resnest269e(pretrained=False, **kwargs):
         base_width=64,
         cardinality=1,
         block_args=dict(radix=2, avd=True, avd_first=False),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest269e", pretrained=pretrained, **model_kwargs)
 
@@ -329,7 +329,7 @@ def resnest50d_4s2x40d(pretrained=False, **kwargs):
         base_width=40,
         cardinality=2,
         block_args=dict(radix=4, avd=True, avd_first=True),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest50d_4s2x40d", pretrained=pretrained, **model_kwargs)
 
@@ -346,6 +346,6 @@ def resnest50d_1s4x24d(pretrained=False, **kwargs):
         base_width=24,
         cardinality=4,
         block_args=dict(radix=1, avd=True, avd_first=True),
-        **kwargs
+        **kwargs,
     )
     return _create_resnest("resnest50d_1s4x24d", pretrained=pretrained, **model_kwargs)

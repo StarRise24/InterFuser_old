@@ -369,7 +369,7 @@ def _create_byoanet(variant, cfg_variant=None, pretrained=False, **kwargs):
         default_cfg=default_cfgs[variant],
         model_cfg=model_cfgs[variant] if not cfg_variant else model_cfgs[cfg_variant],
         feature_cfg=dict(flatten_sequential=True),
-        **kwargs
+        **kwargs,
     )
 
 

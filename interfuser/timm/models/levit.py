@@ -579,7 +579,7 @@ class Levit(nn.Module):
                         stride=do[5],
                         resolution=resolution,
                         resolution_=resolution_,
-                        use_conv=use_conv
+                        use_conv=use_conv,
                     )
                 )
                 resolution = resolution_
@@ -688,7 +688,7 @@ def create_levit(variant, pretrained=False, default_cfg=None, fuse=False, **kwar
         pretrained,
         default_cfg=default_cfgs[variant],
         pretrained_filter_fn=checkpoint_filter_fn,
-        **model_cfg
+        **model_cfg,
     )
     # if fuse:
     #    utils.replace_batchnorm(model)

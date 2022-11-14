@@ -447,7 +447,7 @@ def _create_mixer(variant, pretrained=False, **kwargs):
         pretrained,
         default_cfg=default_cfgs[variant],
         pretrained_filter_fn=checkpoint_filter_fn,
-        **kwargs
+        **kwargs,
     )
     return model
 
@@ -566,7 +566,7 @@ def gmixer_12_224(pretrained=False, **kwargs):
         mlp_ratio=(1.0, 4.0),
         mlp_layer=GluMlp,
         act_layer=nn.SiLU,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("gmixer_12_224", pretrained=pretrained, **model_args)
     return model
@@ -584,7 +584,7 @@ def gmixer_24_224(pretrained=False, **kwargs):
         mlp_ratio=(1.0, 4.0),
         mlp_layer=GluMlp,
         act_layer=nn.SiLU,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("gmixer_24_224", pretrained=pretrained, **model_args)
     return model
@@ -602,7 +602,7 @@ def resmlp_12_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=ResBlock,
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("resmlp_12_224", pretrained=pretrained, **model_args)
     return model
@@ -620,7 +620,7 @@ def resmlp_24_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-5),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("resmlp_24_224", pretrained=pretrained, **model_args)
     return model
@@ -638,7 +638,7 @@ def resmlp_36_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-6),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("resmlp_36_224", pretrained=pretrained, **model_args)
     return model
@@ -656,7 +656,7 @@ def resmlp_big_24_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-6),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("resmlp_big_24_224", pretrained=pretrained, **model_args)
     return model
@@ -674,7 +674,7 @@ def resmlp_12_distilled_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=ResBlock,
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer(
         "resmlp_12_distilled_224", pretrained=pretrained, **model_args
@@ -694,7 +694,7 @@ def resmlp_24_distilled_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-5),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer(
         "resmlp_24_distilled_224", pretrained=pretrained, **model_args
@@ -714,7 +714,7 @@ def resmlp_36_distilled_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-6),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer(
         "resmlp_36_distilled_224", pretrained=pretrained, **model_args
@@ -734,7 +734,7 @@ def resmlp_big_24_distilled_224(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-6),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer(
         "resmlp_big_24_distilled_224", pretrained=pretrained, **model_args
@@ -754,7 +754,7 @@ def resmlp_big_24_224_in22ft1k(pretrained=False, **kwargs):
         mlp_ratio=4,
         block_layer=partial(ResBlock, init_values=1e-6),
         norm_layer=Affine,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer(
         "resmlp_big_24_224_in22ft1k", pretrained=pretrained, **model_args
@@ -774,7 +774,7 @@ def gmlp_ti16_224(pretrained=False, **kwargs):
         mlp_ratio=6,
         block_layer=SpatialGatingBlock,
         mlp_layer=GatedMlp,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("gmlp_ti16_224", pretrained=pretrained, **model_args)
     return model
@@ -792,7 +792,7 @@ def gmlp_s16_224(pretrained=False, **kwargs):
         mlp_ratio=6,
         block_layer=SpatialGatingBlock,
         mlp_layer=GatedMlp,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("gmlp_s16_224", pretrained=pretrained, **model_args)
     return model
@@ -810,7 +810,7 @@ def gmlp_b16_224(pretrained=False, **kwargs):
         mlp_ratio=6,
         block_layer=SpatialGatingBlock,
         mlp_layer=GatedMlp,
-        **kwargs
+        **kwargs,
     )
     model = _create_mixer("gmlp_b16_224", pretrained=pretrained, **model_args)
     return model

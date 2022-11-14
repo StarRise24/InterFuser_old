@@ -368,7 +368,7 @@ def _create_inception_resnet_v2(variant, pretrained=False, **kwargs):
         variant,
         pretrained,
         default_cfg=default_cfgs[variant],
-        **kwargs
+        **kwargs,
     )
 
 

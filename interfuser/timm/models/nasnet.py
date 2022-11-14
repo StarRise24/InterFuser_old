@@ -831,7 +831,7 @@ def _create_nasnet(variant, pretrained=False, **kwargs):
         feature_cfg=dict(
             feature_cls="hook", no_rewrite=True
         ),  # not possible to re-write this model
-        **kwargs
+        **kwargs,
     )
 
 

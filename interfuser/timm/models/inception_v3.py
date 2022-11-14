@@ -467,7 +467,7 @@ def _create_inception_v3(variant, pretrained=False, **kwargs):
         pretrained,
         default_cfg=default_cfg,
         pretrained_strict=load_strict,
-        **kwargs
+        **kwargs,
     )
 
 

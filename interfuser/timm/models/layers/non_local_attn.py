@@ -26,7 +26,7 @@ class NonLocalAttn(nn.Module):
         rd_ratio=1 / 8,
         rd_channels=None,
         rd_divisor=8,
-        **kwargs
+        **kwargs,
     ):
         super(NonLocalAttn, self).__init__()
         if rd_channels is None:
@@ -182,7 +182,7 @@ class BatNonLocalAttn(nn.Module):
         drop_rate=0.2,
         act_layer=nn.ReLU,
         norm_layer=nn.BatchNorm2d,
-        **_
+        **_,
     ):
         super().__init__()
         if rd_channels is None:

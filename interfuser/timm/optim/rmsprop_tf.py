@@ -4,7 +4,7 @@ Originally cut & paste from PyTorch RMSProp
 https://github.com/pytorch/pytorch/blob/063946d2b3f3f1e953a2a3b54e0b34f1393de295/torch/optim/rmsprop.py
 Licensed under BSD-Clause 3 (ish), https://github.com/pytorch/pytorch/blob/master/LICENSE
 
-Modifications Copyright 2021 Ross Wightman
+Modifications Copyright 2020 Ross Wightman
 """
 
 import torch
@@ -86,7 +86,6 @@ class RMSpropTF(Optimizer):
             group.setdefault("momentum", 0)
             group.setdefault("centered", False)
 
-    @torch.no_grad()
     def step(self, closure=None):
         """Performs a single optimization step.
 
@@ -96,14 +95,13 @@ class RMSpropTF(Optimizer):
         """
         loss = None
         if closure is not None:
-            with torch.enable_grad():
-                loss = closure()
+            loss = closure()
 
         for group in self.param_groups:
             for p in group["params"]:
                 if p.grad is None:
                     continue
-                grad = p.grad
+                grad = p.grad.data
                 if grad.is_sparse:
                     raise RuntimeError("RMSprop does not support sparse gradients")
                 state = self.state[p]
@@ -111,11 +109,13 @@ class RMSpropTF(Optimizer):
                 # State initialization
                 if len(state) == 0:
                     state["step"] = 0
-                    state["square_avg"] = torch.ones_like(p)  # PyTorch inits to zero
+                    state["square_avg"] = torch.ones_like(
+                        p.data
+                    )  # PyTorch inits to zero
                     if group["momentum"] > 0:
-                        state["momentum_buffer"] = torch.zeros_like(p)
+                        state["momentum_buffer"] = torch.zeros_like(p.data)
                     if group["centered"]:
-                        state["grad_avg"] = torch.zeros_like(p)
+                        state["grad_avg"] = torch.zeros_like(p.data)
 
                 square_avg = state["square_avg"]
                 one_minus_alpha = 1.0 - group["alpha"]
@@ -123,40 +123,38 @@ class RMSpropTF(Optimizer):
                 state["step"] += 1
 
                 if group["weight_decay"] != 0:
-                    if group["decoupled_decay"]:
-                        p.mul_(1.0 - group["lr"] * group["weight_decay"])
+                    if "decoupled_decay" in group and group["decoupled_decay"]:
+                        p.data.add_(-group["weight_decay"], p.data)
                     else:
-                        grad = grad.add(p, alpha=group["weight_decay"])
+                        grad = grad.add(group["weight_decay"], p.data)
 
                 # Tensorflow order of ops for updating squared avg
-                square_avg.add_(grad.pow(2) - square_avg, alpha=one_minus_alpha)
-                # square_avg.mul_(alpha).addcmul_(grad, grad, value=1 - alpha)  # PyTorch original
+                square_avg.add_(one_minus_alpha, grad.pow(2) - square_avg)
+                # square_avg.mul_(alpha).addcmul_(1 - alpha, grad, grad)  # PyTorch original
 
                 if group["centered"]:
                     grad_avg = state["grad_avg"]
-                    grad_avg.add_(grad - grad_avg, alpha=one_minus_alpha)
+                    grad_avg.add_(one_minus_alpha, grad - grad_avg)
+                    # grad_avg.mul_(alpha).add_(1 - alpha, grad)  # PyTorch original
                     avg = (
-                        square_avg.addcmul(grad_avg, grad_avg, value=-1)
+                        square_avg.addcmul(-1, grad_avg, grad_avg)
                         .add(group["eps"])
                         .sqrt_()
-                    )  # eps in sqrt
-                    # grad_avg.mul_(alpha).add_(grad, alpha=1 - alpha)  # PyTorch original
+                    )  # eps moved in sqrt
                 else:
                     avg = square_avg.add(group["eps"]).sqrt_()  # eps moved in sqrt
 
                 if group["momentum"] > 0:
                     buf = state["momentum_buffer"]
                     # Tensorflow accumulates the LR scaling in the momentum buffer
-                    if group["lr_in_momentum"]:
-                        buf.mul_(group["momentum"]).addcdiv_(
-                            grad, avg, value=group["lr"]
-                        )
-                        p.add_(-buf)
+                    if "lr_in_momentum" in group and group["lr_in_momentum"]:
+                        buf.mul_(group["momentum"]).addcdiv_(group["lr"], grad, avg)
+                        p.data.add_(-buf)
                     else:
                         # PyTorch scales the param update by LR
                         buf.mul_(group["momentum"]).addcdiv_(grad, avg)
-                        p.add_(buf, alpha=-group["lr"])
+                        p.data.add_(-group["lr"], buf)
                 else:
-                    p.addcdiv_(grad, avg, value=-group["lr"])
+                    p.data.addcdiv_(-group["lr"], grad, avg)
 
         return loss

@@ -162,7 +162,7 @@ def gluon_resnet101_v1c(pretrained=False, **kwargs):
         layers=[3, 4, 23, 3],
         stem_width=32,
         stem_type="deep",
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet101_v1c", pretrained, **model_args)
 
@@ -175,7 +175,7 @@ def gluon_resnet152_v1c(pretrained=False, **kwargs):
         layers=[3, 8, 36, 3],
         stem_width=32,
         stem_type="deep",
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet152_v1c", pretrained, **model_args)
 
@@ -189,7 +189,7 @@ def gluon_resnet50_v1d(pretrained=False, **kwargs):
         stem_width=32,
         stem_type="deep",
         avg_down=True,
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet50_v1d", pretrained, **model_args)
 
@@ -203,7 +203,7 @@ def gluon_resnet101_v1d(pretrained=False, **kwargs):
         stem_width=32,
         stem_type="deep",
         avg_down=True,
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet101_v1d", pretrained, **model_args)
 
@@ -217,7 +217,7 @@ def gluon_resnet152_v1d(pretrained=False, **kwargs):
         stem_width=32,
         stem_type="deep",
         avg_down=True,
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet152_v1d", pretrained, **model_args)
 
@@ -239,7 +239,7 @@ def gluon_resnet101_v1s(pretrained=False, **kwargs):
         layers=[3, 4, 23, 3],
         stem_width=64,
         stem_type="deep",
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet101_v1s", pretrained, **model_args)
 
@@ -252,7 +252,7 @@ def gluon_resnet152_v1s(pretrained=False, **kwargs):
         layers=[3, 8, 36, 3],
         stem_width=64,
         stem_type="deep",
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_resnet152_v1s", pretrained, **model_args)
 
@@ -293,7 +293,7 @@ def gluon_seresnext50_32x4d(pretrained=False, **kwargs):
         cardinality=32,
         base_width=4,
         block_args=dict(attn_layer=SEModule),
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_seresnext50_32x4d", pretrained, **model_args)
 
@@ -307,7 +307,7 @@ def gluon_seresnext101_32x4d(pretrained=False, **kwargs):
         cardinality=32,
         base_width=4,
         block_args=dict(attn_layer=SEModule),
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_seresnext101_32x4d", pretrained, **model_args)
 
@@ -321,7 +321,7 @@ def gluon_seresnext101_64x4d(pretrained=False, **kwargs):
         cardinality=64,
         base_width=4,
         block_args=dict(attn_layer=SEModule),
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_seresnext101_64x4d", pretrained, **model_args)
 
@@ -338,6 +338,6 @@ def gluon_senet154(pretrained=False, **kwargs):
         down_kernel_size=3,
         block_reduce_first=2,
         block_args=dict(attn_layer=SEModule),
-        **kwargs
+        **kwargs,
     )
     return _create_resnet("gluon_senet154", pretrained, **model_args)

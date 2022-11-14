@@ -309,7 +309,7 @@ class DlaTree(nn.Module):
                 out_channels,
                 stride,
                 root_dim=0,
-                **cargs
+                **cargs,
             )
             self.tree2 = DlaTree(
                 levels - 1,
@@ -317,7 +317,7 @@ class DlaTree(nn.Module):
                 out_channels,
                 out_channels,
                 root_dim=root_dim + out_channels,
-                **cargs
+                **cargs,
             )
         if levels == 1:
             self.root = DlaRoot(root_dim, out_channels, root_kernel_size, root_shortcut)
@@ -474,7 +474,7 @@ def _create_dla(variant, pretrained=False, **kwargs):
         default_cfg=default_cfgs[variant],
         pretrained_strict=False,
         feature_cfg=dict(out_indices=(1, 2, 3, 4, 5)),
-        **kwargs
+        **kwargs,
     )
 
 
@@ -486,7 +486,7 @@ def dla60_res2net(pretrained=False, **kwargs):
         block=DlaBottle2neck,
         cardinality=1,
         base_width=28,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla60_res2net", pretrained, **model_kwargs)
 
@@ -499,7 +499,7 @@ def dla60_res2next(pretrained=False, **kwargs):
         block=DlaBottle2neck,
         cardinality=8,
         base_width=4,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla60_res2next", pretrained, **model_kwargs)
 
@@ -510,7 +510,7 @@ def dla34(pretrained=False, **kwargs):  # DLA-34
         levels=[1, 1, 1, 2, 2, 1],
         channels=[16, 32, 64, 128, 256, 512],
         block=DlaBasic,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla34", pretrained, **model_kwargs)
 
@@ -521,7 +521,7 @@ def dla46_c(pretrained=False, **kwargs):  # DLA-46-C
         levels=[1, 1, 1, 2, 2, 1],
         channels=[16, 32, 64, 64, 128, 256],
         block=DlaBottleneck,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla46_c", pretrained, **model_kwargs)
 
@@ -534,7 +534,7 @@ def dla46x_c(pretrained=False, **kwargs):  # DLA-X-46-C
         block=DlaBottleneck,
         cardinality=32,
         base_width=4,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla46x_c", pretrained, **model_kwargs)
 
@@ -547,7 +547,7 @@ def dla60x_c(pretrained=False, **kwargs):  # DLA-X-60-C
         block=DlaBottleneck,
         cardinality=32,
         base_width=4,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla60x_c", pretrained, **model_kwargs)
 
@@ -558,7 +558,7 @@ def dla60(pretrained=False, **kwargs):  # DLA-60
         levels=[1, 1, 1, 2, 3, 1],
         channels=[16, 32, 128, 256, 512, 1024],
         block=DlaBottleneck,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla60", pretrained, **model_kwargs)
 
@@ -571,7 +571,7 @@ def dla60x(pretrained=False, **kwargs):  # DLA-X-60
         block=DlaBottleneck,
         cardinality=32,
         base_width=4,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla60x", pretrained, **model_kwargs)
 
@@ -583,7 +583,7 @@ def dla102(pretrained=False, **kwargs):  # DLA-102
         channels=[16, 32, 128, 256, 512, 1024],
         block=DlaBottleneck,
         shortcut_root=True,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla102", pretrained, **model_kwargs)
 
@@ -597,7 +597,7 @@ def dla102x(pretrained=False, **kwargs):  # DLA-X-102
         cardinality=32,
         base_width=4,
         shortcut_root=True,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla102x", pretrained, **model_kwargs)
 
@@ -611,7 +611,7 @@ def dla102x2(pretrained=False, **kwargs):  # DLA-X-102 64
         cardinality=64,
         base_width=4,
         shortcut_root=True,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla102x2", pretrained, **model_kwargs)
 
@@ -623,6 +623,6 @@ def dla169(pretrained=False, **kwargs):  # DLA-169
         channels=[16, 32, 128, 256, 512, 1024],
         block=DlaBottleneck,
         shortcut_root=True,
-        **kwargs
+        **kwargs,
     )
     return _create_dla("dla169", pretrained, **model_kwargs)
