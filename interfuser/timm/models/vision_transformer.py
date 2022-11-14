@@ -166,6 +166,13 @@ default_cfgs = {
         hf_hub="timm/vit_huge_patch14_224_in21k",
         num_classes=21843,
     ),
+    # SAM trained models (https://arxiv.org/abs/2106.01548)
+    "vit_base_patch32_sam_224": _cfg(
+        url="https://storage.googleapis.com/vit_models/sam/ViT-B_32.npz"
+    ),
+    "vit_base_patch16_sam_224": _cfg(
+        url="https://storage.googleapis.com/vit_models/sam/ViT-B_16.npz"
+    ),
     # deit models (FB weights)
     "deit_tiny_patch16_224": _cfg(
         url="https://dl.fbaipublicfiles.com/deit/deit_tiny_patch16_224-a1311bcf.pth",
@@ -339,6 +346,10 @@ class VisionTransformer(nn.Module):
         norm_layer=None,
         act_layer=None,
         weight_init="",
+        head_type="normal",
+        distilled_num=512,
+        no_forward_dist=False,
+        multi_view=False,
     ):
         """
         Args:
@@ -362,10 +373,14 @@ class VisionTransformer(nn.Module):
         """
         super().__init__()
         self.num_classes = num_classes
+        self.distilled_num = distilled_num
+        self.head_type = head_type
         self.num_features = (
             self.embed_dim
         ) = embed_dim  # num_features for consistency with other models
         self.num_tokens = 2 if distilled else 1
+        self.no_forward_dist = no_forward_dist
+        self.multi_view = multi_view
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         act_layer = act_layer or nn.GELU
 
@@ -421,19 +436,40 @@ class VisionTransformer(nn.Module):
         else:
             self.pre_logits = nn.Identity()
 
-        # Classifier head(s)
-        self.head = (
-            nn.Linear(self.num_features, num_classes)
-            if num_classes > 0
-            else nn.Identity()
-        )
-        self.head_dist = None
         if distilled:
             self.head_dist = (
-                nn.Linear(self.embed_dim, self.num_classes)
+                nn.Linear(self.embed_dim, self.distilled_num)
                 if num_classes > 0
                 else nn.Identity()
             )
+
+        # Classifier head(s)
+        if self.head_type == "gru":
+            self.head_fc = nn.Sequential(
+                nn.Linear(self.num_features + 8, 256),
+                nn.ReLU(inplace=True),
+                nn.Linear(256, 128),
+                nn.ReLU(inplace=True),
+                nn.Linear(128, 64),
+                nn.ReLU(inplace=True),
+            )
+            self.gru = nn.GRUCell(input_size=2, hidden_size=64)
+            self.decoder = nn.Linear(64, 2)
+        elif self.head_type == "branch":
+            self.head_fc0 = nn.Sequential(
+                nn.Linear(self.num_features + 8, 256),
+                nn.ReLU(inplace=True),
+            )
+            self.head_fc1_list = nn.ModuleList([nn.Linear(256, 64) for _ in range(6)])
+            self.head_relu = nn.ReLU()
+            self.head_fc2_list = nn.ModuleList([nn.Linear(64, 8) for _ in range(6)])
+        else:
+            self.head = nn.Sequential(
+                nn.Linear(self.num_features + 9, 64),
+                nn.ReLU(),
+                nn.Linear(64, num_classes),
+            )
+        self.measurements_token = nn.Linear(7, self.embed_dim)
 
         self.init_weights(weight_init)
 
@@ -482,11 +518,14 @@ class VisionTransformer(nn.Module):
                 else nn.Identity()
             )
 
-    def forward_features(self, x):
+    def forward_features(self, x, measurements):
         x = self.patch_embed(x)
         cls_token = self.cls_token.expand(
             x.shape[0], -1, -1
         )  # stole cls_tokens impl from Phil Wang, thanks
+        measurements_token = self.measurements_token(measurements).view(
+            x.shape[0], -1, self.embed_dim
+        )
         if self.dist_token is None:
             x = torch.cat((cls_token, x), dim=1)
         else:
@@ -494,6 +533,7 @@ class VisionTransformer(nn.Module):
                 (cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1
             )
         x = self.pos_drop(x + self.pos_embed)
+        x = torch.cat((measurements_token, x), dim=1)
         x = self.blocks(x)
         x = self.norm(x)
         if self.dist_token is None:
@@ -502,17 +542,56 @@ class VisionTransformer(nn.Module):
             return x[:, 0], x[:, 1]
 
     def forward(self, x):
-        x = self.forward_features(x)
-        if self.head_dist is not None:
-            x, x_dist = self.head(x[0]), self.head_dist(x[1])  # x must be a tuple
-            if self.training and not torch.jit.is_scripting():
-                # during inference, return the average of both classifier predictions
-                return x, x_dist
+        image = x["rgb"]
+        measurements = x["measurements"]
+        target_point = x["target_point"]
+        x = self.forward_features(image, measurements)
+        if self.dist_token is not None:
+            x, feature = x
+            if not self.no_forward_dist:
+                feature = self.head_dist(feature)
+        if self.head_type == "gru":
+            velocity = measurements[:, 6:7]
+            velocity = velocity.repeat(1, 8)
+            x = torch.cat((x, velocity), dim=1)
+            x = self.head_fc(x)
+            output_wp = list()
+            res = torch.zeros(size=(x.shape[0], 2), dtype=torch.float32).cuda()
+            for _ in range(4):
+                x_in = res + target_point
+                x = self.gru(x_in, x)
+                dx = self.decoder(x)
+                res = res + dx
+                output_wp.append(res)
+            pred_wp = torch.cat(output_wp, dim=1)
+            if self.dist_token is not None:
+                return pred_wp, feature
             else:
-                return (x + x_dist) / 2
+                return pred_wp
+
+        elif self.head_type == "branch":
+            mask = measurements[:, :6]
+            mask = torch.unsqueeze(mask, -1).repeat(1, 1, 6)
+            velocity = measurements[:, 6:7]
+            velocity = velocity.repeat(1, 8)
+            x = torch.cat((x, velocity), dim=1)
+            x = self.head_fc0(x)
+            rs = []
+            for i in range(6):
+                res = self.head_fc1_list[i](x)
+                res = self.head_relu(res)
+                res = self.head_fc2_list[i](res)
+                rs.append(res)
+            rs = torch.stack(rs, 1)
+            pred_wp = torch.sum(rs * mask, dim=1)
+            if self.dist_token is not None:
+                return pred_wp, feature
+            else:
+                return pred_wp
         else:
+            x = torch.cat((x, measurements), dim=1)
             x = self.head(x)
-        return x
+            return x
 
 
 def _init_vit_weights(
@@ -626,12 +705,15 @@ def _load_weights(model: VisionTransformer, checkpoint_path: str, prefix: str = 
     model.pos_embed.copy_(pos_embed_w)
     model.norm.weight.copy_(_n2p(w[f"{prefix}Transformer/encoder_norm/scale"]))
     model.norm.bias.copy_(_n2p(w[f"{prefix}Transformer/encoder_norm/bias"]))
-    if (
-        isinstance(model.head, nn.Linear)
-        and model.head.bias.shape[0] == w[f"{prefix}head/bias"].shape[-1]
-    ):
-        model.head.weight.copy_(_n2p(w[f"{prefix}head/kernel"]))
-        model.head.bias.copy_(_n2p(w[f"{prefix}head/bias"]))
+    try:
+        if (
+            isinstance(model.head, nn.Linear)
+            and model.head.bias.shape[0] == w[f"{prefix}head/bias"].shape[-1]
+        ):
+            model.head.weight.copy_(_n2p(w[f"{prefix}head/kernel"]))
+            model.head.bias.copy_(_n2p(w[f"{prefix}head/bias"]))
+    except Exception as e:
+        print(e)
     if (
         isinstance(getattr(model.pre_logits, "fc", None), nn.Linear)
         and f"{prefix}pre_logits/bias" in w
@@ -688,7 +770,9 @@ def resize_pos_embed(posemb, posemb_new, num_tokens=1, gs_new=()):
     assert len(gs_new) >= 2
     _logger.info("Position embedding grid-size from %s to %s", [gs_old, gs_old], gs_new)
     posemb_grid = posemb_grid.reshape(1, gs_old, gs_old, -1).permute(0, 3, 1, 2)
-    posemb_grid = F.interpolate(posemb_grid, size=gs_new, mode="bilinear")
+    posemb_grid = F.interpolate(
+        posemb_grid, size=gs_new, mode="bicubic", align_corners=False
+    )
     posemb_grid = posemb_grid.permute(0, 2, 3, 1).reshape(1, gs_new[0] * gs_new[1], -1)
     posemb = torch.cat([posemb_tok, posemb_grid], dim=1)
     return posemb
@@ -813,7 +897,9 @@ def vit_small_patch16_384(pretrained=False, **kwargs):
 
 @register_model
 def vit_base_patch32_224(pretrained=False, **kwargs):
-    """ViT-Base (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929). No pretrained weights."""
+    """ViT-Base (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
+    ImageNet-1k weights fine-tuned from in21k, source https://github.com/google-research/vision_transformer.
+    """
     model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs)
     model = _create_vision_transformer(
         "vit_base_patch32_224", pretrained=pretrained, **model_kwargs
@@ -899,6 +985,40 @@ def vit_large_patch16_384(pretrained=False, **kwargs):
     model_kwargs = dict(patch_size=16, embed_dim=1024, depth=24, num_heads=16, **kwargs)
     model = _create_vision_transformer(
         "vit_large_patch16_384", pretrained=pretrained, **model_kwargs
+    )
+    return model
+
+
+@register_model
+def vit_base_patch16_sam_224(pretrained=False, **kwargs):
+    """ViT-Base (ViT-B/16) w/ SAM pretrained weights. Paper: https://arxiv.org/abs/2106.01548"""
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        representation_size=768,
+        **kwargs,
+    )
+    model = _create_vision_transformer(
+        "vit_base_patch16_sam_224", pretrained=pretrained, **model_kwargs
+    )
+    return model
+
+
+@register_model
+def vit_base_patch32_sam_224(pretrained=False, **kwargs):
+    """ViT-Base (ViT-B/32) w/ SAM pretrained weights. Paper: https://arxiv.org/abs/2106.01548"""
+    model_kwargs = dict(
+        patch_size=32,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        representation_size=768,
+        **kwargs,
+    )
+    model = _create_vision_transformer(
+        "vit_base_patch32_sam_224", pretrained=pretrained, **model_kwargs
     )
     return model
 

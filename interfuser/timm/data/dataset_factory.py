@@ -1,6 +1,7 @@
 import os
 
 from .dataset import IterableImageDataset, ImageDataset
+from .carla_dataset import CarlaMVDetDataset
 
 
 def _search_split(root, split):
@@ -43,4 +44,12 @@ def create_dataset(
         if search_split and os.path.isdir(root):
             root = _search_split(root, split)
         ds = ImageDataset(root, parser=name, **kwargs)
+    return ds
+
+
+def create_carla_dataset(
+    name, root, towns, weathers=None, waypoints_seq_len=5, batch_size=None, **kwargs
+):
+    if name == "carla":
+        ds = CarlaMVDetDataset(root, towns, weathers, "det", **kwargs)
     return ds
