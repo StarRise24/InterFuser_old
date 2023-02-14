@@ -348,24 +348,24 @@ class LeaderboardEvaluator(object):
         print("\033[1m> Running the route\033[0m")
 
         # Run the scenario
-        # try:
-        self.manager.run_scenario()
+        try:
+            self.manager.run_scenario()
 
-        # except AgentError as e:
-        #     # The agent has failed -> stop the route
-        #     print("\n\033[91mStopping the route, the agent has crashed:")
-        #     print("> {}\033[0m\n".format(e))
-        #     traceback.print_exc()
+        except AgentError as e:
+            # The agent has failed -> stop the route
+            print("\n\033[91mStopping the route, the agent has crashed:")
+            print("> {}\033[0m\n".format(e))
+            traceback.print_exc()
 
-        #     crash_message = "Agent crashed"
+            crash_message = "Agent crashed"
 
-        # except Exception as e:
-        #     print("\n\033[91mError during the simulation:")
-        #     print("> {}\033[0m\n".format(e))
-        #     traceback.print_exc()
+        except Exception as e:
+            print("\n\033[91mError during the simulation:")
+            print("> {}\033[0m\n".format(e))
+            traceback.print_exc()
 
-        #     crash_message = "Simulation crashed"
-        #     entry_status = "Crashed"
+            crash_message = "Simulation crashed"
+            entry_status = "Crashed"
 
         # Stop the scenario
         try:

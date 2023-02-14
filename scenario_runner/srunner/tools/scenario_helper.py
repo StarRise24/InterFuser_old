@@ -365,7 +365,13 @@ def generate_target_waypoint_in_route(waypoint, route):
     while True:
         # Get the next route location
         index = min(index + 1, len(route))
-        route_location = route[index][0]
+
+        try:
+            route_location = route[index][0]
+        except IndexError:
+            route_location = route[index - 1][0]
+            break
+
         road_option = route[index][1]
 
         # Enter the junction
