@@ -17,6 +17,8 @@ import numpy.random as random
 
 import py_trees
 
+import os
+
 import carla
 
 from agents.navigation.local_planner import RoadOption
@@ -464,7 +466,10 @@ class RouteScenario(BasicScenario):
             'Town10HD': 120, # town10 doesn't load properly for some reason
         }
 
-        amount = town_amount[config.town] if config.town in town_amount else 0
+        if bool(os.environ.get("LONGEST_6_EVAL")):
+            amount = 500
+        else:
+            amount = town_amount[config.town] if config.town in town_amount else 0
 
         new_actors = CarlaDataProvider.request_new_batch_actors('vehicle.*',
                                                                 amount,

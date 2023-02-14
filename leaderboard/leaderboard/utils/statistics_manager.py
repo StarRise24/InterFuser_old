@@ -14,6 +14,7 @@ from __future__ import print_function
 from dictor import dictor
 import math
 import sys
+import os
 
 from srunner.scenariomanager.traffic_events import TrafficEventType
 
@@ -23,7 +24,7 @@ PENALTY_COLLISION_PEDESTRIAN = 0.50
 PENALTY_COLLISION_VEHICLE = 0.60
 PENALTY_COLLISION_STATIC = 0.65
 PENALTY_TRAFFIC_LIGHT = 0.70
-PENALTY_STOP = 0.80
+PENALTY_STOP = 1.00 if bool(os.environ.get("LONGEST_6_EVAL")) else  0.80
 
 
 class RouteRecord():

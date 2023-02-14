@@ -15,13 +15,15 @@ export PORT=2000 # same as the carla server port
 export TM_PORT=2500 # port for traffic manager, required when spawning multiple servers/clients
 export DEBUG_CHALLENGE=0
 export REPETITIONS=1 # multiple evaluation runs
-export ROUTES=leaderboard/data/training_routes/routes_town05_long.xml
+export ROUTES=leaderboard/data/42routes/42routes.xml
 export TEAM_AGENT=leaderboard/team_code/interfuser_agent.py # agent
 export TEAM_CONFIG=leaderboard/team_code/interfuser_config.py # model checkpoint, not required for expert
-export CHECKPOINT_ENDPOINT=results/sample_result.json # results file
-export SCENARIOS=leaderboard/data/scenarios/town05_all_scenarios.json
+export CHECKPOINT_ENDPOINT=results/42routes.json # results file
+export SCENARIOS=leaderboard/data/42routes/42scenarios.json
 export SAVE_PATH=data/eval # path for saving episodes while evaluating
 export RESUME=True
+
+export LONGEST_6_EVAL=False
 
 python3 ${LEADERBOARD_ROOT}/leaderboard/leaderboard_evaluator.py \
 --scenarios=${SCENARIOS}  \
