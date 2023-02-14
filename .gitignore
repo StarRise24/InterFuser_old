@@ -1,0 +1,10 @@
+/carla/
+.venv
+.envrc
+__pycache__
+
+interfuser.pth.tar
+
+/data
+
+/typings
