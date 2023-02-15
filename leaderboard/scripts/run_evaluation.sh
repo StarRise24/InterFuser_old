@@ -36,6 +36,7 @@ elif [ "$EVALUATION" = "longest6" ]; then
     export ROUTES=leaderboard/data/longest6/longest6.xml
     export SCENARIOS=leaderboard/data/longest6/eval_scenarios.json
     export CHECKPOINT_ENDPOINT=results/longest6.json
+    export LONGEST_6_EVAL=True
 else
     export ROUTES=leaderboard/data/42routes/42routes.xml
     export SCENARIOS=leaderboard/data/42routes/42scenarios.json
