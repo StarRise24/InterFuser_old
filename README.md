@@ -43,17 +43,17 @@ cd interfuser
 python setup.py develop
 ```
 
-Download and setup CARLA 0.9.10.1
+Download and setup CARLA 0.9.14
 ```Shell
 chmod +x setup_carla.sh
 ./setup_carla.sh
-easy_install carla/PythonAPI/carla/dist/carla-0.9.10-py3.7-linux-x86_64.egg
+easy_install carla/PythonAPI/carla/dist/carla-0.9.14-py3.7-linux-x86_64.egg
 ```
 
 **Note:** we choose the setuptools==41 to install because this version has the feature `easy_install`. After installing the carla.egg you can install the lastest setuptools to avoid *No module named distutils_hack*.
 
 ## Dataset
-The data is generated with ```leaderboard/team_code/auto_pilot.py``` in 8 CARLA towns using the routes and scenarios files provided at ```leaderboard/data``` on CARLA 0.9.10.1
+The data is generated with ```leaderboard/team_code/auto_pilot.py``` in 8 CARLA towns using the routes and scenarios files provided at ```leaderboard/data``` on CARLA 0.9.14
 
 The collected dataset is structured as follows:
 ```
@@ -79,22 +79,22 @@ In addition to the dataset, we have also provided all the scripts used for gener
 ```bash
 # start 14 carla servers: ip [localhost], port [20000 - 20026]
 cd carla
-CUDA_VISIBLE_DEVICES=0 ./CarlaUE4.sh --world-port=20000 -opengl &
-CUDA_VISIBLE_DEVICES=1 ./CarlaUE4.sh --world-port=20002 -opengl &
+CUDA_VISIBLE_DEVICES=0 ./CarlaUE4.sh --world-port=20000 &
+CUDA_VISIBLE_DEVICES=1 ./CarlaUE4.sh --world-port=20002 &
 ...
-CUDA_VISIBLE_DEVICES=7 ./CarlaUE4.sh --world-port=20026 -opengl &
+CUDA_VISIBLE_DEVICES=7 ./CarlaUE4.sh --world-port=20026 &
 ```
 
-Instructions for setting up docker are available [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker). Pull the docker image of CARLA 0.9.10.1 ```docker pull carlasim/carla:0.9.10.1```.
+Instructions for setting up docker are available [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker). Pull the docker image of CARLA 0.9.14 ```docker pull carlasim/carla:0.9.14```.
 
 Docker 18:
 ```
-docker run -it --rm -p 2000-2002:2000-2002 --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 carlasim/carla:0.9.10.1 ./CarlaUE4.sh --world-port=2000 -opengl
+docker run -it --rm -p 2000-2002:2000-2002 --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 carlasim/carla:0.9.14 ./CarlaUE4.sh
 ```
 
 Docker 19:
 ```Shell
-docker run -it --rm --net=host --gpus '"device=0"' carlasim/carla:0.9.10.1 ./CarlaUE4.sh --world-port=2000 -opengl
+docker run -it --rm --net=host --gpus '"device=0"' carlasim/carla:0.9.14 ./CarlaUE4.sh
 ```
 
 If the docker container doesn't start properly then add another environment variable ```-e SDL_AUDIODRIVER=dsp```.
@@ -129,7 +129,7 @@ bash data_collection/batch_run/run_route_routes_town07_tiny.sh
 ### Data Generation with a single CARLA Server
 With a single CARLA server, rollout the autopilot to start data generation.
 ```Shell
-carla/CarlaUE4.sh --world-port=2000 -opengl
+carla/CarlaUE4.sh --world-port=2000
 ./leaderboard/scripts/run_evaluation.sh
 ```
 The expert agent used for data generation is defined in ```leaderboard/team_code/auto_pilot.py```. Different variables which need to be set are specified in ```leaderboard/scripts/run_evaluation.sh```. 

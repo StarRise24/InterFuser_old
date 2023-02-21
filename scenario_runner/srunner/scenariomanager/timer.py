@@ -35,7 +35,7 @@ class GameTime(object):
         Callback receiving the CARLA time
         Update time only when frame is more recent that last frame
         """
-        if GameTime._last_frame < timestamp.frame:
+        if not GameTime._init or GameTime._last_frame < timestamp.frame:
             frames = timestamp.frame - GameTime._last_frame if GameTime._init else 1
             GameTime._current_game_time += timestamp.delta_seconds * frames
             GameTime._last_frame = timestamp.frame

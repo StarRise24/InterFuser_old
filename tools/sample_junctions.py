@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 import carla
 from agents.navigation.global_route_planner import GlobalRoutePlanner
-from agents.navigation.global_route_planner_dao import GlobalRoutePlannerDAO
 from agents.navigation.local_planner import RoadOption
 
 
@@ -26,9 +25,7 @@ def interpolate_trajectory(world_map, waypoints_trajectory, hop_resolution=1.0):
         route: full interpolated route both in GPS coordinates and also in its original form.
     """
 
-    dao = GlobalRoutePlannerDAO(world_map, hop_resolution)
-    grp = GlobalRoutePlanner(dao)
-    grp.setup()
+    grp = GlobalRoutePlanner(world_map, hop_resolution)
     # Obtain route plan
     route = []
     for i in range(
