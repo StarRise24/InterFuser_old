@@ -338,9 +338,9 @@ class LeaderboardEvaluator(object):
             # self.agent_instance.sensor_interface = SensorInterface()
 
             # Night mode
-            if config.weather.sun_altitude_angle < 0.0:
-                for vehicle in scenario.ego_vehicles:
-                    vehicle.set_light_state(carla.VehicleLightState(self._vehicle_lights))
+            # if config.weather.sun_altitude_angle < 0.0:
+            for vehicle in self.world.get_actors().filter('vehicle.*'):
+                vehicle.set_light_state(carla.VehicleLightState(self._vehicle_lights))
 
             # Load scenario and run it
             if args.record:
