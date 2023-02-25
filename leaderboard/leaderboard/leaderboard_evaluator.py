@@ -492,6 +492,9 @@ def main():
 
     arguments = parser.parse_args()
 
+    checkpoint_timestamp = '_' + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    arguments.checkpoint = arguments.checkpoint.replace('.json', checkpoint_timestamp + '.json')
+
     statistics_manager = StatisticsManager()
 
     try:
