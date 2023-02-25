@@ -1,7 +1,3 @@
-import os
-import json
-import datetime
-import pathlib
 import time
 import imp
 import cv2
@@ -32,7 +28,6 @@ except ImportError:
     raise RuntimeError("cannot import pygame, make sure pygame package is installed")
 
 
-SAVE_PATH = os.environ.get("SAVE_PATH", 'eval')
 IMAGENET_DEFAULT_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_DEFAULT_STD = (0.229, 0.224, 0.225)
 
@@ -213,23 +208,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         self.prev_lidar = None
         self.prev_control = None
         self.prev_surround_map = None
-
         self.save_path = None
-        if SAVE_PATH is not None:
-            now = datetime.datetime.now()
-            string = pathlib.Path(os.environ["ROUTES"]).stem + "_"
-            string += "_".join(
-                map(
-                    lambda x: "%02d" % x,
-                    (now.month, now.day, now.hour, now.minute, now.second),
-                )
-            )
-
-            print(string)
-
-            self.save_path = pathlib.Path(SAVE_PATH) / string
-            self.save_path.mkdir(parents=True, exist_ok=False)
-            (self.save_path / "meta").mkdir(parents=True, exist_ok=False)
 
     def _init(self):
         self._route_planner = RoutePlanner(4.0, 50.0)
@@ -573,17 +552,16 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         surface = self._hic.run_interface(tick_data)
         tick_data["surface"] = surface
 
-        if SAVE_PATH is not None:
-            self.save(tick_data)
+        self.save(tick_data)
 
         return control
 
     def save(self, tick_data):
-        frame = self.step // self.skip_frames
-        Image.fromarray(tick_data["surface"]).save(
-            self.save_path / "meta" / ("%04d.jpg" % frame)
-        )
-        return
+        if self.save_path:
+            frame = self.step // self.skip_frames
+            Image.fromarray(tick_data["surface"]).save(
+                self.save_path / "meta" / ("%04d.jpg" % frame)
+            )
 
     def destroy(self):
         if self.ensemble:

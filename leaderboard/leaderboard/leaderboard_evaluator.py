@@ -12,6 +12,7 @@ Provisional code to evaluate Autonomous Agents for the CARLA Autonomous Driving 
 """
 from __future__ import print_function
 
+import pathlib
 import traceback
 import argparse
 from argparse import RawTextHelpFormatter
@@ -38,6 +39,7 @@ from leaderboard.autoagents.agent_wrapper import  AgentWrapper, AgentError
 from leaderboard.utils.statistics_manager import StatisticsManager
 from leaderboard.utils.route_indexer import RouteIndexer
 
+SAVE_PATH = os.environ.get("SAVE_PATH", 'eval')
 
 sensors_to_icons = {
     'sensor.camera.rgb':        'carla_camera',
@@ -268,6 +270,22 @@ class LeaderboardEvaluator(object):
             self._agent_watchdog.start()
             agent_class_name = getattr(self.module_agent, 'get_entry_point')()
             self.agent_instance = getattr(self.module_agent, agent_class_name)(args.agent_config)
+
+            if SAVE_PATH is not None:
+                now = datetime.now()
+                string = pathlib.Path(os.environ["ROUTES"]).stem + "_"
+                string += f"route{config.index}_"
+                string += "_".join(
+                    map(
+                        lambda x: "%02d" % x,
+                        (now.month, now.day, now.hour, now.minute, now.second),
+                    )
+                )
+
+                self.agent_instance.save_path = pathlib.Path(SAVE_PATH) / string
+                self.agent_instance.save_path.mkdir(parents=True, exist_ok=False)
+                (self.agent_instance.save_path / "meta").mkdir(parents=True, exist_ok=False)
+
             config.agent = self.agent_instance
 
             # Check and store the sensors
