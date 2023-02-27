@@ -12,7 +12,9 @@ Provisional code to evaluate Autonomous Agents for the CARLA Autonomous Driving 
 """
 from __future__ import print_function
 
+import glob
 import pathlib
+import json
 import traceback
 import argparse
 from argparse import RawTextHelpFormatter
@@ -494,6 +496,26 @@ def main():
 
     checkpoint_timestamp = '_' + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     arguments.checkpoint = arguments.checkpoint.replace('.json', checkpoint_timestamp + '.json')
+
+    # check if we have an unfinished checkpoint
+    checkpoint_directory = os.path.dirname(arguments.checkpoint)
+    checkpoint_prefix = os.path.basename(arguments.checkpoint).split('_')[0]
+
+    files = glob.glob(os.path.join(checkpoint_directory, f'{checkpoint_prefix}_*.json'))
+
+    if files:
+        latest_checkpoint_file = sorted(files)[-1]
+        data = None
+
+        if os.path.exists(latest_checkpoint_file):
+            with open(latest_checkpoint_file) as fd:
+                try:
+                    data = json.load(fd)
+                except json.JSONDecodeError:
+                    pass
+
+            if data and data.get("_checkpoint", {}).get("global_record", {}) == {}:
+                arguments.checkpoint = latest_checkpoint_file
 
     statistics_manager = StatisticsManager()
 
