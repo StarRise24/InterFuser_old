@@ -9,6 +9,7 @@ import math
 from collections import deque
 from itertools import chain
 
+import tarfile
 import numpy as np
 import cv2
 import carla
@@ -879,3 +880,12 @@ class AutoPilot(MapAgent):
             + math.cos(math.radians(angle)) * point.y
         )
         return carla.Vector3D(x_, y_, point.z)
+
+    def destroy(self):
+        print(f"Creating archive of {self.save_path}")
+
+        if self.save_path is not None:
+            with tarfile.open(self.save_path + ".tar.gz", "w:gz") as tar:
+                tar.add(self.save_path, arcname=os.path.basename(self.save_path))
+
+        return super().destroy()
