@@ -831,7 +831,7 @@ class MVTL1Loss:
         output_2 = output[target_1_mask][:][:, 6]
         target_2 = target[target_1_mask][:][:, 6]
         if target_2.numel() == 0:
-            loss_3 = 0
+            loss_3 = torch.tensor(0.0).cuda()
         else:
             loss_3 = self.loss(target_2, output_2)
         return 0.5 * loss_1 * self.weight + 0.5 * loss_2, loss_3
