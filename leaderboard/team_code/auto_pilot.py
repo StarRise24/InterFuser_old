@@ -142,12 +142,12 @@ class AutoPilot(MapAgent):
             updated_route = self.disturb_waypoints(self._waypoint_planner.route)
             self._waypoint_planner.route = updated_route
 
-        self.birdview_producer = BirdViewProducer(
-            CarlaDataProvider.get_client(),  # carla.Client
-            target_size=PixelDimensions(width=400, height=400),
-            pixels_per_meter=4,
-            crop_type=BirdViewCropType.FRONT_AND_REAR_AREA,
-        )
+        # self.birdview_producer = BirdViewProducer(
+        #     CarlaDataProvider.get_client(),  # carla.Client
+        #     target_size=PixelDimensions(width=400, height=400),
+        #     pixels_per_meter=4,
+        #     crop_type=BirdViewCropType.FRONT_AND_REAR_AREA,
+        # )
 
     def disturb_waypoints(self, route):
         updated_route = deque()
@@ -256,9 +256,9 @@ class AutoPilot(MapAgent):
         control.throttle = throttle
         control.brake = float(brake)
 
-        self.birdview = BirdViewProducer.as_rgb(
-            self.birdview_producer.produce(agent_vehicle=self._vehicle)
-        )
+        # self.birdview = BirdViewProducer.as_rgb(
+        #     self.birdview_producer.produce(agent_vehicle=self._vehicle)
+        # )
         if self.step % self.save_skip_frames == 0 and self.save_path is not None:
             self.save(
                 near_node,

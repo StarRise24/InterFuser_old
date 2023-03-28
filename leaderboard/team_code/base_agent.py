@@ -97,23 +97,24 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 if hasattr(sensor, "save") and sensor["save"]:
                     (self.save_path / sensor["id"]).mkdir()
 
-            (self.save_path / "3d_bbs").mkdir(parents=True, exist_ok=True)
+            # (self.save_path / "3d_bbs").mkdir(parents=True, exist_ok=True)
             (self.save_path / "affordances").mkdir(parents=True, exist_ok=True)
             (self.save_path / "measurements").mkdir(parents=True, exist_ok=True)
             (self.save_path / "actors_data").mkdir(parents=True, exist_ok=True)
             (self.save_path / "lidar").mkdir(parents=True, exist_ok=True)
-            (self.save_path / "topdown").mkdir(parents=True, exist_ok=True)
-            (self.save_path / "birdview").mkdir(parents=True, exist_ok=True)
+            # (self.save_path / "topdown").mkdir(parents=True, exist_ok=True)
+            # (self.save_path / "birdview").mkdir(parents=True, exist_ok=True)
 
             for pos in ["front", "left", "right"]:
-                for sensor_type in ["rgb", "seg", "depth", "2d_bbs"]:
-                    name = sensor_type + "_" + pos
-                    (self.save_path / name).mkdir()
-
-            for pos in ["rear"]:
+                #for sensor_type in ["rgb", "seg", "depth", "2d_bbs"]:
                 for sensor_type in ["rgb"]:
                     name = sensor_type + "_" + pos
                     (self.save_path / name).mkdir()
+
+            # for pos in ["rear"]:
+            #     for sensor_type in ["rgb"]:
+            #         name = sensor_type + "_" + pos
+            #         (self.save_path / name).mkdir()
 
     def _init(self):
         self._command_planner = RoutePlanner(7.5, 25.0, 257)
@@ -147,45 +148,45 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 "fov": self._rgb_sensor_data["fov"],
                 "id": "rgb_front",
             },
-            {
-                "type": "sensor.camera.semantic_segmentation",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 0.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "seg_front",
-            },
-            {
-                "type": "sensor.camera.depth",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 0.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "depth_front",
-            },
-            {
-                "type": "sensor.camera.rgb",
-                "x": -1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 180.0,
-                "width": self._rgb_sensor_data["width"],
-                "height": self._rgb_sensor_data["height"],
-                "fov": self._rgb_sensor_data["fov"],
-                "id": "rgb_rear",
-            },
+            # {
+            #     "type": "sensor.camera.semantic_segmentation",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 0.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "seg_front",
+            # },
+            # {
+            #     "type": "sensor.camera.depth",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 0.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "depth_front",
+            # },
+            # {
+            #     "type": "sensor.camera.rgb",
+            #     "x": -1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 180.0,
+            #     "width": self._rgb_sensor_data["width"],
+            #     "height": self._rgb_sensor_data["height"],
+            #     "fov": self._rgb_sensor_data["fov"],
+            #     "id": "rgb_rear",
+            # },
             {
                 "type": "sensor.camera.rgb",
                 "x": 1.3,
@@ -199,32 +200,32 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 "fov": self._rgb_sensor_data["fov"],
                 "id": "rgb_left",
             },
-            {
-                "type": "sensor.camera.semantic_segmentation",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": -60.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "seg_left",
-            },
-            {
-                "type": "sensor.camera.depth",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": -60.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "depth_left",
-            },
+            # {
+            #     "type": "sensor.camera.semantic_segmentation",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": -60.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "seg_left",
+            # },
+            # {
+            #     "type": "sensor.camera.depth",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": -60.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "depth_left",
+            # },
             {
                 "type": "sensor.camera.rgb",
                 "x": 1.3,
@@ -238,32 +239,32 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 "fov": self._rgb_sensor_data["fov"],
                 "id": "rgb_right",
             },
-            {
-                "type": "sensor.camera.semantic_segmentation",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 60.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "seg_right",
-            },
-            {
-                "type": "sensor.camera.depth",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 60.0,
-                "width": self._sensor_data["width"],
-                "height": self._sensor_data["height"],
-                "fov": self._sensor_data["fov"],
-                "id": "depth_right",
-            },
+            # {
+            #     "type": "sensor.camera.semantic_segmentation",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 60.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "seg_right",
+            # },
+            # {
+            #     "type": "sensor.camera.depth",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 60.0,
+            #     "width": self._sensor_data["width"],
+            #     "height": self._sensor_data["height"],
+            #     "fov": self._sensor_data["fov"],
+            #     "id": "depth_right",
+            # },
             {
                 "type": "sensor.lidar.ray_cast",
                 "x": 1.3,
@@ -318,45 +319,45 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         if not self.rgb_only:
             affordances = self._get_affordances()
 
-            traffic_lights = self._find_obstacle("*traffic_light*")
-            stop_signs = self._find_obstacle("*stop*")
+            # traffic_lights = self._find_obstacle("*traffic_light*")
+            # stop_signs = self._find_obstacle("*stop*")
 
-            depth = {}
-            seg = {}
+            # depth = {}
+            # seg = {}
 
-            bb_3d = self._get_3d_bbs(max_distance=self._3d_bb_distance)
+            # bb_3d = self._get_3d_bbs(max_distance=self._3d_bb_distance)
 
-            bb_2d = {}
+            # bb_2d = {}
 
-            for pos in ["front", "left", "right"]:
-                seg_cam = "seg_" + pos
-                depth_cam = "depth_" + pos
-                _segmentation = np.copy(input_data[seg_cam][1][:, :, 2])
+            # for pos in ["front", "left", "right"]:
+            #     seg_cam = "seg_" + pos
+            #     depth_cam = "depth_" + pos
+            #     _segmentation = np.copy(input_data[seg_cam][1][:, :, 2])
 
-                depth[pos] = self._get_depth(input_data[depth_cam][1][:, :, :3])
-                self._change_seg_tl(_segmentation, depth[pos], traffic_lights)
-                self._change_seg_stop(_segmentation, depth[pos], stop_signs, seg_cam)
+            #     depth[pos] = self._get_depth(input_data[depth_cam][1][:, :, :3])
+            #     self._change_seg_tl(_segmentation, depth[pos], traffic_lights)
+            #     self._change_seg_stop(_segmentation, depth[pos], stop_signs, seg_cam)
 
-                bb_2d[pos] = self._get_2d_bbs(
-                    seg_cam, affordances, bb_3d, _segmentation
-                )
+            #     bb_2d[pos] = self._get_2d_bbs(
+            #         seg_cam, affordances, bb_3d, _segmentation
+            #     )
 
-                seg[pos] = _segmentation
+            #     seg[pos] = _segmentation
 
-            depth_front = cv2.cvtColor(
-                input_data["depth_front"][1][:, :, :3], cv2.COLOR_BGR2RGB
-            )
-            depth_left = cv2.cvtColor(
-                input_data["depth_left"][1][:, :, :3], cv2.COLOR_BGR2RGB
-            )
-            depth_right = cv2.cvtColor(
-                input_data["depth_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
-            )
+            # depth_front = cv2.cvtColor(
+            #     input_data["depth_front"][1][:, :, :3], cv2.COLOR_BGR2RGB
+            # )
+            # depth_left = cv2.cvtColor(
+            #     input_data["depth_left"][1][:, :, :3], cv2.COLOR_BGR2RGB
+            # )
+            # depth_right = cv2.cvtColor(
+            #     input_data["depth_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
+            # )
 
         rgb_front = cv2.cvtColor(
             input_data["rgb_front"][1][:, :, :3], cv2.COLOR_BGR2RGB
         )
-        rgb_rear = cv2.cvtColor(input_data["rgb_rear"][1][:, :, :3], cv2.COLOR_BGR2RGB)
+        # rgb_rear = cv2.cvtColor(input_data["rgb_rear"][1][:, :, :3], cv2.COLOR_BGR2RGB)
         rgb_left = cv2.cvtColor(input_data["rgb_left"][1][:, :, :3], cv2.COLOR_BGR2RGB)
         rgb_right = cv2.cvtColor(
             input_data["rgb_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
@@ -370,7 +371,7 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         if self.rgb_only:
             return {
                 "rgb_front": rgb_front,
-                "rgb_rear": rgb_rear,
+                # "rgb_rear": rgb_rear,
                 "rgb_left": rgb_left,
                 "rgb_right": rgb_right,
                 "gps": gps,
@@ -381,25 +382,25 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         else:
             return {
                 "rgb_front": rgb_front,
-                "seg_front": seg["front"],
-                "depth_front": depth_front,
-                "2d_bbs_front": bb_2d["front"],
-                "rgb_rear": rgb_rear,
+                # "seg_front": seg["front"],
+                # "depth_front": depth_front,
+                # "2d_bbs_front": bb_2d["front"],
+                # "rgb_rear": rgb_rear,
                 "rgb_left": rgb_left,
-                "seg_left": seg["left"],
-                "depth_left": depth_left,
-                "2d_bbs_left": bb_2d["left"],
+                # "seg_left": seg["left"],
+                # "depth_left": depth_left,
+                # "2d_bbs_left": bb_2d["left"],
                 "rgb_right": rgb_right,
-                "seg_right": seg["right"],
-                "depth_right": depth_right,
-                "2d_bbs_right": bb_2d["right"],
+                # "seg_right": seg["right"],
+                # "depth_right": depth_right,
+                # "2d_bbs_right": bb_2d["right"],
                 "lidar": input_data["lidar"][1],
                 "gps": gps,
                 "speed": speed,
                 "compass": compass,
                 "weather": weather,
                 "affordances": affordances,
-                "3d_bbs": bb_3d,
+                # "3d_bbs": bb_3d,
             }
 
     def save(
@@ -465,33 +466,34 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         json.dump(self.actors_data, f, indent=4)
         f.close()
 
-        Image.fromarray(self.birdview).save(
-            self.save_path / "birdview" / ("%04d.jpg" % frame)
-        )
+        # Image.fromarray(self.birdview).save(
+        #     self.save_path / "birdview" / ("%04d.jpg" % frame)
+        # )
 
-        for pos in ["front", "left", "right", "rear"]:
+        # for pos in ["front", "left", "right", "rear"]:
+        for pos in ["front", "left", "right"]:
             name = "rgb_" + pos
             Image.fromarray(tick_data[name]).save(
                 self.save_path / name / ("%04d.jpg" % frame)
             )
-            if not self.rgb_only and pos != "rear":
-                for sensor_type in ["seg", "depth"]:
-                    name = sensor_type + "_" + pos
-                    Image.fromarray(tick_data[name]).save(
-                        self.save_path / name / ("%04d.jpg" % frame)
-                    )
-                for sensor_type in ["2d_bbs"]:
-                    name = sensor_type + "_" + pos
-                    np.save(
-                        self.save_path / name / ("%04d.npy" % frame),
-                        tick_data[name],
-                        allow_pickle=True,
-                    )
+            # if not self.rgb_only and pos != "rear":
+            #     for sensor_type in ["seg", "depth"]:
+            #         name = sensor_type + "_" + pos
+            #         Image.fromarray(tick_data[name]).save(
+            #             self.save_path / name / ("%04d.jpg" % frame)
+            #         )
+            #     for sensor_type in ["2d_bbs"]:
+            #         name = sensor_type + "_" + pos
+            #         np.save(
+            #             self.save_path / name / ("%04d.npy" % frame),
+            #             tick_data[name],
+            #             allow_pickle=True,
+            #         )
 
         if not self.rgb_only:
-            Image.fromarray(tick_data["topdown"]).save(
-                self.save_path / "topdown" / ("%04d.jpg" % frame)
-            )
+            # Image.fromarray(tick_data["topdown"]).save(
+            #     self.save_path / "topdown" / ("%04d.jpg" % frame)
+            # )
             np.save(
                 self.save_path / "affordances" / ("%04d.npy" % frame),
                 tick_data["affordances"],
@@ -502,11 +504,11 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 tick_data["lidar"],
                 allow_pickle=True,
             )
-            np.save(
-                self.save_path / "3d_bbs" / ("%04d.npy" % frame),
-                tick_data["3d_bbs"],
-                allow_pickle=True,
-            )
+            # np.save(
+            #     self.save_path / "3d_bbs" / ("%04d.npy" % frame),
+            #     tick_data["3d_bbs"],
+            #     allow_pickle=True,
+            # )
 
     def _weather_to_dict(self, carla_weather):
         weather = {

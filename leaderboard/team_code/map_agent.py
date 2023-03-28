@@ -10,21 +10,21 @@ from team_code.planner import RoutePlanner
 class MapAgent(BaseAgent):
     def sensors(self):
         result = super().sensors()
-        result.append(
-            {
-                "type": "sensor.camera.semantic_segmentation",
-                "x": 0.0,
-                "y": 0.0,
-                "z": 100.0,
-                "roll": 0.0,
-                "pitch": -90.0,
-                "yaw": 0.0,
-                "width": 512,
-                "height": 512,
-                "fov": 5 * 10.0,
-                "id": "map",
-            }
-        )
+        # result.append(
+        #     {
+        #         "type": "sensor.camera.semantic_segmentation",
+        #         "x": 0.0,
+        #         "y": 0.0,
+        #         "z": 100.0,
+        #         "roll": 0.0,
+        #         "pitch": -90.0,
+        #         "yaw": 0.0,
+        #         "width": 512,
+        #         "height": 512,
+        #         "fov": 5 * 10.0,
+        #         "id": "map",
+        #     }
+        # )
 
         return result
 
@@ -55,12 +55,12 @@ class MapAgent(BaseAgent):
             self._vehicle, self._actors.filter("*stop*")
         )
 
-        topdown = input_data["map"][1][:, :, 2]
-        topdown = draw_traffic_lights(topdown, self._vehicle, self._traffic_lights)
-        topdown = draw_stop_signs(topdown, self._vehicle, self._stop_signs)
+        # topdown = input_data["map"][1][:, :, 2]
+        # topdown = draw_traffic_lights(topdown, self._vehicle, self._traffic_lights)
+        # topdown = draw_stop_signs(topdown, self._vehicle, self._stop_signs)
 
         result = super().tick(input_data)
-        result["topdown"] = topdown
+        # result["topdown"] = topdown
 
         return result
 
