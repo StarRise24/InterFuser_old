@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-import pathlib
+from pathlib import Path
 import json
 import random
 import shapely
@@ -9,6 +9,8 @@ import math
 from collections import deque
 from itertools import chain
 
+import tarfile
+import shutil
 import numpy as np
 import cv2
 import carla
@@ -140,12 +142,12 @@ class AutoPilot(MapAgent):
             updated_route = self.disturb_waypoints(self._waypoint_planner.route)
             self._waypoint_planner.route = updated_route
 
-        self.birdview_producer = BirdViewProducer(
-            CarlaDataProvider.get_client(),  # carla.Client
-            target_size=PixelDimensions(width=400, height=400),
-            pixels_per_meter=4,
-            crop_type=BirdViewCropType.FRONT_AND_REAR_AREA,
-        )
+        # self.birdview_producer = BirdViewProducer(
+        #     CarlaDataProvider.get_client(),  # carla.Client
+        #     target_size=PixelDimensions(width=400, height=400),
+        #     pixels_per_meter=4,
+        #     crop_type=BirdViewCropType.FRONT_AND_REAR_AREA,
+        # )
 
     def disturb_waypoints(self, route):
         updated_route = deque()
@@ -254,9 +256,9 @@ class AutoPilot(MapAgent):
         control.throttle = throttle
         control.brake = float(brake)
 
-        self.birdview = BirdViewProducer.as_rgb(
-            self.birdview_producer.produce(agent_vehicle=self._vehicle)
-        )
+        # self.birdview = BirdViewProducer.as_rgb(
+        #     self.birdview_producer.produce(agent_vehicle=self._vehicle)
+        # )
         if self.step % self.save_skip_frames == 0 and self.save_path is not None:
             self.save(
                 near_node,
@@ -879,3 +881,22 @@ class AutoPilot(MapAgent):
             + math.cos(math.radians(angle)) * point.y
         )
         return carla.Vector3D(x_, y_, point.z)
+
+    def destroy(self):
+        print(f"Creating archive of {self.save_path}")
+
+        if self.save_path is not None:
+            with tarfile.open(str(self.save_path) + ".tar.gz", "w:gz") as tar:
+                tar.add(str(self.save_path), arcname=os.path.basename(self.save_path))
+
+        print(f"Removing {self.save_path}")
+        shutil.rmtree(self.save_path)
+
+        # remove other folders, since they are dangling from unfinished runs
+        save_path_parent = Path(self.save_path).parent
+
+        for path in save_path_parent.iterdir():
+            if path.is_dir():
+                shutil.rmtree(path)
+
+        return super().destroy()
