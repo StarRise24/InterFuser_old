@@ -1185,7 +1185,7 @@ def main():
     output_dir = None
     writer = None
     if args.rank == 0:
-        exp_name = datetime.now().strftime("%Y%m%d-%H%M%S"),
+        exp_name = datetime.now().strftime("%Y%m%d-%H%M%S")
         if args.experiment:
             exp_name += "-" + args.experiment
 
