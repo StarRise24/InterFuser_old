@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-import pathlib
+from pathlib import Path
 import json
 import random
 import shapely
@@ -891,5 +891,12 @@ class AutoPilot(MapAgent):
 
         print(f"Removing {self.save_path}")
         shutil.rmtree(self.save_path)
+
+        # remove other folders, since they are dangling from unfinished runs
+        save_path_parent = Path(self.save_path).parent
+
+        for path in save_path_parent.iterdir():
+            if path.is_dir():
+                shutil.rmtree(path)
 
         return super().destroy()
