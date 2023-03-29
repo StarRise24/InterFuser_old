@@ -1185,23 +1185,10 @@ def main():
     output_dir = None
     writer = None
     if args.rank == 0:
+        exp_name = datetime.now().strftime("%Y%m%d-%H%M%S"),
         if args.experiment:
-            exp_name = "-".join(
-                [
-                    datetime.now().strftime("%Y%m%d-%H%M%S"),
-                    safe_model_name(args.model),
-                    str(data_config["input_size"][-1]),
-                    args.experiment,
-                ]
-            )
-        else:
-            exp_name = "-".join(
-                [
-                    datetime.now().strftime("%Y%m%d-%H%M%S"),
-                    safe_model_name(args.model),
-                    str(data_config["input_size"][-1]),
-                ]
-            )
+            exp_name += "-" + args.experiment
+
         output_dir = get_outdir(args.output if args.output else "./output", exp_name)
         writer = SummaryWriter(logdir=output_dir)
         decreasing = args.saver_decreasing
