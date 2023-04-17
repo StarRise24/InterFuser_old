@@ -493,6 +493,8 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         for name in CAMERA_NAMES:
             output[name] = cv2.cvtColor(input_data[name][1][:, :, :3], cv2.COLOR_BGR2RGB)
 
+        return output
+
         # if self.rgb_only:
         #     return {
         #         "rgb_front": rgb_front,
