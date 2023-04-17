@@ -43,6 +43,7 @@ WEATHERS = {
 }
 WEATHERS_IDS = list(WEATHERS)
 
+CAMERA_NAMES = ["C1_front60Single", "C2_tricam60", "C3_tricam120", "C4_rearCam", "C8_R2", "C5_R1", "C6_L1", "C7_L2"]
 
 class BaseAgent(autonomous_agent.AutonomousAgent):
     def setup(self, path_to_conf_file):
@@ -105,11 +106,14 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
             # (self.save_path / "topdown").mkdir(parents=True, exist_ok=True)
             # (self.save_path / "birdview").mkdir(parents=True, exist_ok=True)
 
-            for pos in ["front", "left", "right"]:
-                #for sensor_type in ["rgb", "seg", "depth", "2d_bbs"]:
-                for sensor_type in ["rgb"]:
-                    name = sensor_type + "_" + pos
-                    (self.save_path / name).mkdir()
+            # for pos in ["front", "left", "right"]:
+            #     #for sensor_type in ["rgb", "seg", "depth", "2d_bbs"]:
+            #     for sensor_type in ["rgb"]:
+            #         name = sensor_type + "_" + pos
+            #         (self.save_path / name).mkdir()
+
+            for name in CAMERA_NAMES:
+                (self.save_path / name).mkdir()
 
             # for pos in ["rear"]:
             #     for sensor_type in ["rgb"]:
@@ -135,19 +139,19 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
 
     def sensors(self):
         sensors_list = [
-            {
-                "type": "sensor.camera.rgb",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 0.0,
-                "width": self._rgb_sensor_data["width"],
-                "height": self._rgb_sensor_data["height"],
-                "fov": self._rgb_sensor_data["fov"],
-                "id": "rgb_front",
-            },
+            # {
+            #     "type": "sensor.camera.rgb",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 0.0,
+            #     "width": self._rgb_sensor_data["width"],
+            #     "height": self._rgb_sensor_data["height"],
+            #     "fov": self._rgb_sensor_data["fov"],
+            #     "id": "rgb_front",
+            # },
             # {
             #     "type": "sensor.camera.semantic_segmentation",
             #     "x": 1.3,
@@ -187,19 +191,19 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
             #     "fov": self._rgb_sensor_data["fov"],
             #     "id": "rgb_rear",
             # },
-            {
-                "type": "sensor.camera.rgb",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": -60.0,
-                "width": self._rgb_sensor_data["width"],
-                "height": self._rgb_sensor_data["height"],
-                "fov": self._rgb_sensor_data["fov"],
-                "id": "rgb_left",
-            },
+            # {
+            #     "type": "sensor.camera.rgb",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": -60.0,
+            #     "width": self._rgb_sensor_data["width"],
+            #     "height": self._rgb_sensor_data["height"],
+            #     "fov": self._rgb_sensor_data["fov"],
+            #     "id": "rgb_left",
+            # },
             # {
             #     "type": "sensor.camera.semantic_segmentation",
             #     "x": 1.3,
@@ -226,19 +230,19 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
             #     "fov": self._sensor_data["fov"],
             #     "id": "depth_left",
             # },
-            {
-                "type": "sensor.camera.rgb",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.3,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 60.0,
-                "width": self._rgb_sensor_data["width"],
-                "height": self._rgb_sensor_data["height"],
-                "fov": self._rgb_sensor_data["fov"],
-                "id": "rgb_right",
-            },
+            # {
+            #     "type": "sensor.camera.rgb",
+            #     "x": 1.3,
+            #     "y": 0.0,
+            #     "z": 2.3,
+            #     "roll": 0.0,
+            #     "pitch": 0.0,
+            #     "yaw": 60.0,
+            #     "width": self._rgb_sensor_data["width"],
+            #     "height": self._rgb_sensor_data["height"],
+            #     "fov": self._rgb_sensor_data["fov"],
+            #     "id": "rgb_right",
+            # },
             # {
             #     "type": "sensor.camera.semantic_segmentation",
             #     "x": 1.3,
@@ -298,6 +302,110 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
                 "id": "gps",
             },
             {"type": "sensor.speedometer", "reading_frequency": 20, "id": "speed"},
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.477748,
+                "y": -0.241295,
+                "z": 1.781576,
+                "roll": 1.624299,
+                "pitch": 2.829775,
+                "yaw": -2.152302,
+                "width": 1920,
+                "height": 1208,
+                "fov": 60,
+                "id": "C1_front60Single",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.469463,
+                "y": 0.096403,
+                "z": 1.627890,
+                "roll": -1.649049,
+                "pitch": 2.605477,
+                "yaw": 6.683704,
+                "width": 1920,
+                "height": 1208,
+                "fov": 60,
+                "id": "C2_tricam60",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.522764,
+                "y": 0.130508,
+                "z": 1.600084,
+                "roll": -0.913306,
+                "pitch": 2.483113,
+                "yaw": 1.848283,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C3_tricam120",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": -1.807476,
+                "y": -0.017932,
+                "z": 1.775562,
+                "roll": 1.358793,
+                "pitch": 4.126693,
+                "yaw": -178.943680,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C4_rearCam",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.676480,
+                "y": 0.895918,
+                "z": 1.437428,
+                "roll": 0.706273,
+                "pitch": 0.741232,
+                "yaw": 62.413895,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C8_R2",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.595348,
+                "y": 0.951235,
+                "z": 1.424497,
+                "roll": 2.778383,
+                "pitch": -1.005296,
+                "yaw": 131.372772,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C5_R1",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.645139,
+                "y": -0.976260,
+                "z": 1.436506,
+                "roll": -0.975950,
+                "pitch": -2.254568,
+                "yaw": -118.803108,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C6_L1",
+            },
+            {
+                "type": "sensor.camera.rgb",
+                "x": 0.734501,
+                "y": -0.951668,
+                "z": 1.439002,
+                "roll": -0.149951,
+                "pitch": 0.485583,
+                "yaw": -48.862160,
+                "width": 1920,
+                "height": 1208,
+                "fov": 120,
+                "id": "C7_L2",
+            },
         ]
         if self.rgb_only:
             sensors_list = [
@@ -354,54 +462,71 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
             #     input_data["depth_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
             # )
 
-        rgb_front = cv2.cvtColor(
-            input_data["rgb_front"][1][:, :, :3], cv2.COLOR_BGR2RGB
-        )
-        # rgb_rear = cv2.cvtColor(input_data["rgb_rear"][1][:, :, :3], cv2.COLOR_BGR2RGB)
-        rgb_left = cv2.cvtColor(input_data["rgb_left"][1][:, :, :3], cv2.COLOR_BGR2RGB)
-        rgb_right = cv2.cvtColor(
-            input_data["rgb_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
-        )
+
+
+
+        # rgb_front = cv2.cvtColor(
+        #     input_data["rgb_front"][1][:, :, :3], cv2.COLOR_BGR2RGB
+        # )
+        # # rgb_rear = cv2.cvtColor(input_data["rgb_rear"][1][:, :, :3], cv2.COLOR_BGR2RGB)
+        # rgb_left = cv2.cvtColor(input_data["rgb_left"][1][:, :, :3], cv2.COLOR_BGR2RGB)
+        # rgb_right = cv2.cvtColor(
+        #     input_data["rgb_right"][1][:, :, :3], cv2.COLOR_BGR2RGB
+        # )
+
         gps = input_data["gps"][1][:2]
         speed = input_data["speed"][1]["speed"]
         compass = input_data["imu"][1][-1]
 
         weather = self._weather_to_dict(self._world.get_weather())
 
-        if self.rgb_only:
-            return {
-                "rgb_front": rgb_front,
-                # "rgb_rear": rgb_rear,
-                "rgb_left": rgb_left,
-                "rgb_right": rgb_right,
-                "gps": gps,
-                "speed": speed,
-                "compass": compass,
-                "weather": weather,
-            }
-        else:
-            return {
-                "rgb_front": rgb_front,
-                # "seg_front": seg["front"],
-                # "depth_front": depth_front,
-                # "2d_bbs_front": bb_2d["front"],
-                # "rgb_rear": rgb_rear,
-                "rgb_left": rgb_left,
-                # "seg_left": seg["left"],
-                # "depth_left": depth_left,
-                # "2d_bbs_left": bb_2d["left"],
-                "rgb_right": rgb_right,
-                # "seg_right": seg["right"],
-                # "depth_right": depth_right,
-                # "2d_bbs_right": bb_2d["right"],
-                "lidar": input_data["lidar"][1],
-                "gps": gps,
-                "speed": speed,
-                "compass": compass,
-                "weather": weather,
-                "affordances": affordances,
-                # "3d_bbs": bb_3d,
-            }
+        output = {
+            "lidar": input_data["lidar"][1],
+            "gps": gps,
+            "speed": speed,
+            "compass": compass,
+            "weather": weather,
+            "affordances": affordances
+        }
+
+
+        for name in CAMERA_NAMES:
+            output[name] = cv2.cvtColor(input_data[name][1][:, :, :3], cv2.COLOR_BGR2RGB)
+
+        # if self.rgb_only:
+        #     return {
+        #         "rgb_front": rgb_front,
+        #         # "rgb_rear": rgb_rear,
+        #         "rgb_left": rgb_left,
+        #         "rgb_right": rgb_right,
+        #         "gps": gps,
+        #         "speed": speed,
+        #         "compass": compass,
+        #         "weather": weather,
+        #     }
+        # else:
+        #     return {
+        #         "rgb_front": rgb_front,
+        #         # "seg_front": seg["front"],
+        #         # "depth_front": depth_front,
+        #         # "2d_bbs_front": bb_2d["front"],
+        #         # "rgb_rear": rgb_rear,
+        #         "rgb_left": rgb_left,
+        #         # "seg_left": seg["left"],
+        #         # "depth_left": depth_left,
+        #         # "2d_bbs_left": bb_2d["left"],
+        #         "rgb_right": rgb_right,
+        #         # "seg_right": seg["right"],
+        #         # "depth_right": depth_right,
+        #         # "2d_bbs_right": bb_2d["right"],
+        #         "lidar": input_data["lidar"][1],
+        #         "gps": gps,
+        #         "speed": speed,
+        #         "compass": compass,
+        #         "weather": weather,
+        #         "affordances": affordances,
+        #         # "3d_bbs": bb_3d,
+        #     }
 
     def save(
         self,
@@ -471,24 +596,29 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
         # )
 
         # for pos in ["front", "left", "right", "rear"]:
-        for pos in ["front", "left", "right"]:
-            name = "rgb_" + pos
+        # for pos in ["front", "left", "right"]:
+        #     name = "rgb_" + pos
+        #     Image.fromarray(tick_data[name]).save(
+        #         self.save_path / name / ("%04d.jpg" % frame)
+        #     )
+        #     # if not self.rgb_only and pos != "rear":
+        #     #     for sensor_type in ["seg", "depth"]:
+        #     #         name = sensor_type + "_" + pos
+        #     #         Image.fromarray(tick_data[name]).save(
+        #     #             self.save_path / name / ("%04d.jpg" % frame)
+        #     #         )
+        #     #     for sensor_type in ["2d_bbs"]:
+        #     #         name = sensor_type + "_" + pos
+        #     #         np.save(
+        #     #             self.save_path / name / ("%04d.npy" % frame),
+        #     #             tick_data[name],
+        #     #             allow_pickle=True,
+        #     #         )
+
+        for name in CAMERA_NAMES:
             Image.fromarray(tick_data[name]).save(
                 self.save_path / name / ("%04d.jpg" % frame)
             )
-            # if not self.rgb_only and pos != "rear":
-            #     for sensor_type in ["seg", "depth"]:
-            #         name = sensor_type + "_" + pos
-            #         Image.fromarray(tick_data[name]).save(
-            #             self.save_path / name / ("%04d.jpg" % frame)
-            #         )
-            #     for sensor_type in ["2d_bbs"]:
-            #         name = sensor_type + "_" + pos
-            #         np.save(
-            #             self.save_path / name / ("%04d.npy" % frame),
-            #             tick_data[name],
-            #             allow_pickle=True,
-            #         )
 
         if not self.rgb_only:
             # Image.fromarray(tick_data["topdown"]).save(
