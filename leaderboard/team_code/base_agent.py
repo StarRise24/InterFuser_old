@@ -271,9 +271,9 @@ class BaseAgent(autonomous_agent.AutonomousAgent):
             # },
             {
                 "type": "sensor.lidar.ray_cast",
-                "x": 1.3,
-                "y": 0.0,
-                "z": 2.5,
+                "x": -0.638467,
+                "y": -0.020235,
+                "z": 2.065906,
                 "roll": 0.0,
                 "pitch": 0.0,
                 "yaw": -90.0,
