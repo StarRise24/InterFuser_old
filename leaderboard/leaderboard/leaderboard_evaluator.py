@@ -271,7 +271,8 @@ class LeaderboardEvaluator(object):
             agent_class_name = getattr(self.module_agent, 'get_entry_point')()
             self.agent_instance = getattr(self.module_agent, agent_class_name)(args.agent_config)
 
-            if SAVE_PATH is not None:
+            if SAVE_PATH is not None and agent_class_name == "InterfuserAgent":
+                # only change save path when doing eval
                 now = datetime.now()
                 string = pathlib.Path(os.environ["ROUTES"]).stem + "_"
                 string += f"route{config.index}_"
