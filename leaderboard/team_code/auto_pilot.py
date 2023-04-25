@@ -861,7 +861,7 @@ class AutoPilot(MapAgent):
             else:
                 self.hazard_actors_dict[actor.id] = 0
         for actor_id in self.hazard_actors_dict:
-            if self.hazard_actors_dict[actor_id] > 1500:
+            if self.hazard_actors_dict[actor_id] > 700:
                 actor = actors.find(actor_id)
                 print(
                     "destory hazard actor: id: %d, type: %s" % (actor.id, actor.type_id)
