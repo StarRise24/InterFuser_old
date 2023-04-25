@@ -342,7 +342,8 @@ class AutoPilot(MapAgent):
         )
         light = self._is_light_red(actors.filter("*traffic_light*"))
         walker = self._is_walker_hazard(actors.filter("*walker*"))
-        bike = self._is_bike_hazard(actors.filter("*vehicle*"))
+        #bike = self._is_bike_hazard(actors.filter("*vehicle*"))
+        bike = []
         stop_sign = self._is_stop_sign_hazard(actors.filter("*stop*"))
 
         # record the reason for braking
