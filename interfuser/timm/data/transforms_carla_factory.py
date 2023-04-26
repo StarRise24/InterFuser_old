@@ -77,18 +77,21 @@ def create_carla_rgb_transform(
         img_size = input_size
     tfl = []
 
+    # resize to to default interfuser sensor size
+    tfl.append(Resize2FixedSize((800, 600)))
+
     if isinstance(input_size, (tuple, list)):
         input_size_num = input_size[-1]
     else:
         input_size_num = input_size
 
-    if need_scale:
+    if need_scale: # false for focus view
         if input_size_num == 112:
             tfl.append(Resize2FixedSize((170, 128)))
         elif input_size_num == 128:
-            tfl.append(Resize2FixedSize((195, 146)))
+            tfl.append(Resize2FixedSize((195, 146))) # side cameras
         elif input_size_num == 224:
-            tfl.append(Resize2FixedSize((341, 256)))
+            tfl.append(Resize2FixedSize((341, 256)))  # center cameras
         elif input_size_num == 256:
             tfl.append(Resize2FixedSize((340, 288)))
         else:

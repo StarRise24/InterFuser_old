@@ -160,13 +160,13 @@ class CarlaMVDetDataset(BaseIODataset):
         """
 
         rgb_image = self._load_image(
-            os.path.join(route_dir, "rgb_front", "%04d.jpg" % frame_id)
+            os.path.join(route_dir, "C3_tricam120", "%04d.jpg" % frame_id)
         )
         rgb_left_image = self._load_image(
-            os.path.join(route_dir, "rgb_left", "%04d.jpg" % frame_id)
+            os.path.join(route_dir, "C7_L2", "%04d.jpg" % frame_id)
         )
         rgb_right_image = self._load_image(
-            os.path.join(route_dir, "rgb_right", "%04d.jpg" % frame_id)
+            os.path.join(route_dir, "C8_R2", "%04d.jpg" % frame_id)
         )
 
         if self.augment_prob > 0:
