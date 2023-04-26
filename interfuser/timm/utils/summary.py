@@ -33,7 +33,7 @@ def update_summary(
 ):
     rowd = OrderedDict(epoch=epoch)
     rowd.update([("train_" + k, v) for k, v in train_metrics.items()])
-    rowd.update([("eval_" + k, v) for k, v in eval_metrics.items()])
+    #rowd.update([("eval_" + k, v) for k, v in eval_metrics.items()])
     if log_wandb:
         wandb.log(rowd)
     with open(filename, mode="a") as cf:

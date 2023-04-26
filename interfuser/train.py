@@ -1087,18 +1087,18 @@ def main():
             multi_view=args.multi_view,
             augment_prob=args.augment_prob
         )
-        dataset_eval = create_carla_dataset(
-            args.dataset,
-            root=args.data_dir,
-            towns=args.val_towns,
-            weathers=args.val_weathers,
-            batch_size=args.batch_size,
-            with_lidar=args.with_lidar,
-            with_seg=args.with_seg,
-            with_depth=args.with_depth,
-            multi_view=args.multi_view,
-            augment_prob=args.augment_prob
-        )
+        # dataset_eval = create_carla_dataset(
+        #     args.dataset,
+        #     root=args.data_dir,
+        #     towns=args.val_towns,
+        #     weathers=args.val_weathers,
+        #     batch_size=args.batch_size,
+        #     with_lidar=args.with_lidar,
+        #     with_seg=args.with_seg,
+        #     with_depth=args.with_depth,
+        #     multi_view=args.multi_view,
+        #     augment_prob=args.augment_prob
+        # )
     else:
         dataset_train = create_dataset(
             args.dataset,
@@ -1108,13 +1108,13 @@ def main():
             batch_size=args.batch_size,
             repeats=args.epoch_repeats,
         )
-        dataset_eval = create_dataset(
-            args.dataset,
-            root=args.data_dir,
-            split=args.val_split,
-            is_training=False,
-            batch_size=args.batch_size,
-        )
+        # dataset_eval = create_dataset(
+        #     args.dataset,
+        #     root=args.data_dir,
+        #     split=args.val_split,
+        #     is_training=False,
+        #     batch_size=args.batch_size,
+        # )
 
     collate_fn = None
     mixup_fn = None
@@ -1140,19 +1140,19 @@ def main():
         pin_memory=args.pin_mem,
     )
 
-    loader_eval = create_carla_loader(
-        dataset_eval,
-        input_size=data_config["input_size"],
-        batch_size=args.validation_batch_size_multiplier * args.batch_size,
-        multi_view_input_size=args.multi_view_input_size,
-        is_training=False,
-        interpolation=data_config["interpolation"],
-        mean=data_config["mean"],
-        std=data_config["std"],
-        num_workers=args.workers,
-        distributed=args.distributed,
-        pin_memory=args.pin_mem,
-    )
+    # loader_eval = create_carla_loader(
+    #     dataset_eval,
+    #     input_size=data_config["input_size"],
+    #     batch_size=args.validation_batch_size_multiplier * args.batch_size,
+    #     multi_view_input_size=args.multi_view_input_size,
+    #     is_training=False,
+    #     interpolation=data_config["interpolation"],
+    #     mean=data_config["mean"],
+    #     std=data_config["std"],
+    #     num_workers=args.workers,
+    #     distributed=args.distributed,
+    #     pin_memory=args.pin_mem,
+    # )
 
     # setup loss function
     if args.smoothing > 0:
@@ -1171,16 +1171,16 @@ def main():
         "cls": cls_loss,
         "stop_cls": cls_loss,
     }
-    validate_loss_fns = {
-        "traffic": MVTL1Loss(1.0, l1_loss=l1_loss),
-        "waypoints": WaypointL1Loss(l1_loss=l1_loss),
-        "cls": cls_loss,
-        "stop_cls": cls_loss,
-    }
+    # validate_loss_fns = {
+    #     "traffic": MVTL1Loss(1.0, l1_loss=l1_loss),
+    #     "waypoints": WaypointL1Loss(l1_loss=l1_loss),
+    #     "cls": cls_loss,
+    #     "stop_cls": cls_loss,
+    # }
 
-    eval_metric = args.eval_metric
-    best_metric = None
-    best_epoch = None
+    # eval_metric = args.eval_metric
+
+    header_is_written = False    
     saver = None
     output_dir = None
     writer = None
@@ -1233,54 +1233,57 @@ def main():
                     _logger.info("Distributing BatchNorm running means and vars")
                 distribute_bn(model, args.world_size, args.dist_bn == "reduce")
 
-            eval_metrics = validate(
-                epoch,
-                model,
-                loader_eval,
-                validate_loss_fns,
-                args,
-                writer,
-                amp_autocast=amp_autocast,
-            )
+            # eval_metrics = validate(
+            #     epoch,
+            #     model,
+            #     loader_eval,
+            #     validate_loss_fns,
+            #     args,
+            #     writer,
+            #     amp_autocast=amp_autocast,
+            # )
 
-            if model_ema is not None and not args.model_ema_force_cpu:
-                if args.distributed and args.dist_bn in ("broadcast", "reduce"):
-                    distribute_bn(model_ema, args.world_size, args.dist_bn == "reduce")
-                ema_eval_metrics = validate(
-                    model_ema.module,
-                    loader_eval,
-                    validate_loss_fn,
-                    args,
-                    amp_autocast=amp_autocast,
-                    log_suffix=" (EMA)",
-                )
-                eval_metrics = ema_eval_metrics
+            # if model_ema is not None and not args.model_ema_force_cpu:
+            #     if args.distributed and args.dist_bn in ("broadcast", "reduce"):
+            #         distribute_bn(model_ema, args.world_size, args.dist_bn == "reduce")
+            #     ema_eval_metrics = validate(
+            #         model_ema.module,
+            #         loader_eval,
+            #         validate_loss_fn,
+            #         args,
+            #         amp_autocast=amp_autocast,
+            #         log_suffix=" (EMA)",
+            #     )
+            #     eval_metrics = ema_eval_metrics
 
             if lr_scheduler is not None:
                 # step LR for next epoch
-                lr_scheduler.step(epoch + 1, eval_metrics[eval_metric])
+                # lr_scheduler.step(epoch + 1, eval_metrics[eval_metric])
+                lr_scheduler.step(epoch + 1)
 
             if output_dir is not None:
                 update_summary(
                     epoch,
                     train_metrics,
-                    eval_metrics,
+                    None, # eval_metrics,
                     os.path.join(output_dir, "summary.csv"),
-                    write_header=best_metric is None,
+                    write_header=not header_is_written,
                     log_wandb=args.log_wandb and has_wandb,
                 )
+                header_is_written = True
 
             if saver is not None:
                 # save proper checkpoint with eval metric
-                save_metric = eval_metrics[eval_metric]
-                best_metric, best_epoch = saver.save_checkpoint(
-                    epoch, metric=save_metric
-                )
+                # save_metric = eval_metrics[eval_metric]
+                # best_metric, best_epoch = saver.save_checkpoint(
+                #     epoch, metric=save_metric
+                # )
+                saver.save_checkpoint(epoch)
 
     except KeyboardInterrupt:
         pass
-    if best_metric is not None:
-        _logger.info("*** Best metric: {0} (epoch {1})".format(best_metric, best_epoch))
+    # if best_metric is not None:
+    #     _logger.info("*** Best metric: {0} (epoch {1})".format(best_metric, best_epoch))
 
 
 def retransform(data):
