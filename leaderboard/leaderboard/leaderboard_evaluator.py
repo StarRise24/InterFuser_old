@@ -283,9 +283,8 @@ class LeaderboardEvaluator(object):
                     )
                 )
 
-                self.agent_instance.save_path = pathlib.Path(SAVE_PATH) / string
+                self.agent_instance.save_path = pathlib.Path(SAVE_PATH) / string / "meta"
                 self.agent_instance.save_path.mkdir(parents=True, exist_ok=False)
-                (self.agent_instance.save_path / "meta").mkdir(parents=True, exist_ok=False)
 
             config.agent = self.agent_instance
 
