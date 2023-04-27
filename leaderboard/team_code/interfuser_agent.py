@@ -9,6 +9,7 @@ import torch
 import carla
 import numpy as np
 from PIL import Image
+from pathlib import Path
 from easydict import EasyDict
 
 from torchvision import transforms
@@ -211,7 +212,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         self.prev_lidar = None
         self.prev_control = None
         self.prev_surround_map = None
-        self.save_path = SAVE_PATH
+        self.save_path = Path(SAVE_PATH) if SAVE_PATH else None
 
     def _init(self):
         self._route_planner = RoutePlanner(4.0, 50.0)
