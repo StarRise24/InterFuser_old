@@ -33,5 +33,6 @@ class GlobalConfig:
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-        if model_path := os.environ.get("MODEL_PATH") is not None:
+        model_path = os.environ.get("MODEL_PATH")
+        if model_path is not None:
             self.model_path = model_path
