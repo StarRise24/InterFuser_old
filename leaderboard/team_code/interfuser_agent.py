@@ -3,6 +3,7 @@ import imp
 import cv2
 import carla
 from collections import deque
+import os
 
 import torch
 import carla
@@ -30,6 +31,8 @@ except ImportError:
 
 IMAGENET_DEFAULT_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_DEFAULT_STD = (0.229, 0.224, 0.225)
+
+SAVE_PATH = os.environ.get("SAVE_PATH", None)
 
 
 class DisplayInterface(object):
@@ -208,7 +211,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         self.prev_lidar = None
         self.prev_control = None
         self.prev_surround_map = None
-        self.save_path = None
+        self.save_path = SAVE_PATH
 
     def _init(self):
         self._route_planner = RoutePlanner(4.0, 50.0)
@@ -560,8 +563,10 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         if self.save_path:
             frame = self.step // self.skip_frames
             Image.fromarray(tick_data["surface"]).save(
-                self.save_path / "meta" / ("%04d.jpg" % frame)
+                self.save_path / ("%04d.jpg" % frame)
             )
+        else:
+            print("Warning: save path not set, will not save")
 
     def destroy(self):
         if self.ensemble:
