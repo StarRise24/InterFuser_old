@@ -34,6 +34,7 @@ IMAGENET_DEFAULT_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_DEFAULT_STD = (0.229, 0.224, 0.225)
 
 SAVE_PATH = os.environ.get("SAVE_PATH", None)
+METADATA_TEXT_COLOR = os.environ.get("METADATA_TEXT_COLOR", "0,0,255")
 
 
 class DisplayInterface(object):
@@ -49,6 +50,9 @@ class DisplayInterface(object):
             (self._width, self._height), pygame.HWSURFACE | pygame.DOUBLEBUF
         )
         pygame.display.set_caption("Human Agent")
+        self.metadata_text_color = tuple(map(int, METADATA_TEXT_COLOR.split(",")))
+        assert len(self.metadata_text_color) == 3
+        assert all(0 <= x <= 255 for x in self.metadata_text_color)
 
     def run_interface(self, input_data):
         rgb = input_data['rgb']
@@ -64,10 +68,10 @@ class DisplayInterface(object):
         surface[:150,:200] = input_data['rgb_left']
         surface[:150, 600:800] = input_data['rgb_right']
         surface[:150, 325:475] = input_data['rgb_focus']
-        surface = cv2.putText(surface, input_data['control'], (20,580), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255), 1)
-        surface = cv2.putText(surface, input_data['meta_infos'][0], (20,560), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255), 1)
-        surface = cv2.putText(surface, input_data['meta_infos'][1], (20,540), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255), 1)
-        surface = cv2.putText(surface, input_data['time'], (20,520), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255), 1)
+        surface = cv2.putText(surface, input_data['control'], (20,580), cv2.FONT_HERSHEY_SIMPLEX,0.5,self.metadata_text_color, 1)
+        surface = cv2.putText(surface, input_data['meta_infos'][0], (20,560), cv2.FONT_HERSHEY_SIMPLEX,0.5,self.metadata_text_color, 1)
+        surface = cv2.putText(surface, input_data['meta_infos'][1], (20,540), cv2.FONT_HERSHEY_SIMPLEX,0.5,self.metadata_text_color, 1)
+        surface = cv2.putText(surface, input_data['time'], (20,520), cv2.FONT_HERSHEY_SIMPLEX,0.5,self.metadata_text_color, 1)
 
         surface = cv2.putText(surface, 'Left  View', (40,135), cv2.FONT_HERSHEY_SIMPLEX,0.75,(0,0,0), 2)
         surface = cv2.putText(surface, 'Focus View', (335,135), cv2.FONT_HERSHEY_SIMPLEX,0.75,(0,0,0), 2)
