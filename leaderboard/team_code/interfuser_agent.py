@@ -305,6 +305,13 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         ]
 
     def tick(self, input_data):
+        # resize to to default interfuser sensor size
+        for cam in ["rgb", "rgb_left", "rgb_right"]:
+            copy = list(input_data[cam])
+            pil = Image.fromarray(copy[1])
+            pil = pil.resize((800, 600), Image.BILINEAR)
+            copy[1] = np.array(pil)
+            input_data[cam] = tuple(copy)
 
         rgb = cv2.cvtColor(input_data["rgb"][1][:, :, :3], cv2.COLOR_BGR2RGB)
         rgb_left = cv2.cvtColor(input_data["rgb_left"][1][:, :, :3], cv2.COLOR_BGR2RGB)
