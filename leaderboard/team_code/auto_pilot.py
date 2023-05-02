@@ -48,6 +48,8 @@ WEATHERS = {
 }
 WEATHERS_IDS = list(WEATHERS)
 
+CREATE_SCENARIO_ARCHIVES = os.environ.get("CREATE_SCENARIO_ARCHIVES", 1)
+
 
 def get_entry_point():
     return "AutoPilot"
@@ -884,20 +886,22 @@ class AutoPilot(MapAgent):
         return carla.Vector3D(x_, y_, point.z)
 
     def destroy(self):
-        print(f"Creating archive of {self.save_path}")
 
-        if self.save_path is not None:
-            with tarfile.open(str(self.save_path) + ".tar.gz", "w:gz") as tar:
-                tar.add(str(self.save_path), arcname=os.path.basename(self.save_path))
+        if CREATE_SCENARIO_ARCHIVES == 1:
+            print(f"Creating archive of {self.save_path}")
 
-        print(f"Removing {self.save_path}")
-        shutil.rmtree(self.save_path)
+            if self.save_path is not None:
+                with tarfile.open(str(self.save_path) + ".tar.gz", "w:gz") as tar:
+                    tar.add(str(self.save_path), arcname=os.path.basename(self.save_path))
 
-        # remove other folders, since they are dangling from unfinished runs
-        save_path_parent = Path(self.save_path).parent
+            print(f"Removing {self.save_path}")
+            shutil.rmtree(self.save_path)
 
-        for path in save_path_parent.iterdir():
-            if path.is_dir():
-                shutil.rmtree(path)
+            # remove other folders, since they are dangling from unfinished runs
+            save_path_parent = Path(self.save_path).parent
+
+            for path in save_path_parent.iterdir():
+                if path.is_dir():
+                    shutil.rmtree(path)
 
         return super().destroy()
