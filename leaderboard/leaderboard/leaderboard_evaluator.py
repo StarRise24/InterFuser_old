@@ -378,6 +378,13 @@ class LeaderboardEvaluator(object):
 
             crash_message = "Agent crashed"
 
+        except IndexError as e:
+            print("\n\033[91mStopping the route due to IndexError:")
+            print("> {}\033[0m\n".format(e))
+            traceback.print_exc()
+
+            crash_message = "IndexError"
+
         except Exception as e:
             print("\n\033[91mError during the simulation:")
             print("> {}\033[0m\n".format(e))
