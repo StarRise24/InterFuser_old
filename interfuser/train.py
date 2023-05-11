@@ -1278,7 +1278,7 @@ def main():
                 # best_metric, best_epoch = saver.save_checkpoint(
                 #     epoch, metric=save_metric
                 # )
-                saver.save_checkpoint(epoch, train_metrics["loss"])
+                saver.save_checkpoint(epoch)
 
     except KeyboardInterrupt:
         pass
