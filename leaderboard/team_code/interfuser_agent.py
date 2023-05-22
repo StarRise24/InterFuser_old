@@ -536,6 +536,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
             self.prev_surround_map = surround_map
         
         self.prev_waypoints = pred_waypoints
+        self.meta_infos = meta_infos
 
         tick_data["map"] = self.prev_surround_map
         tick_data["map_t1"] = map_t1
