@@ -187,6 +187,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
 
         self.config = imp.load_source("MainModel", path_to_conf_file).GlobalConfig()
         self.skip_frames = self.config.skip_frames
+        self.skip_step = 2 
         self.controller = InterfuserController(self.config)
         if isinstance(self.config.model, list):
             self.ensemble = True
@@ -216,6 +217,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         self.prev_lidar = None
         self.prev_control = None
         self.prev_surround_map = None
+        self.prev_waypoints = None
         self.save_path = Path(SAVE_PATH) if SAVE_PATH else None
 
     def _init(self):
@@ -352,7 +354,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
             -pos[1],
         )
         lidar_processed = lidar_to_histogram_features(full_lidar, crop=224)
-        if self.step % 2 == 0 or self.step < 4:
+        if self.step % self.skip_step == 0 or self.step < 4:
             self.prev_lidar = lidar_processed
         result["lidar"] = self.prev_lidar
 
@@ -460,7 +462,7 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         stop_sign = self.softmax(stop_sign).detach().cpu().numpy().reshape(-1)[0]
 
 
-        if self.step % 2 == 0 or self.step < 4:
+        if self.step % self.skip_step == 0 or self.step < 4:
             traffic_meta = self.tracker.update_and_predict(traffic_meta.reshape(20, 20, -1), tick_data['gps'], tick_data['compass'], self.step // 2)
             traffic_meta = traffic_meta.reshape(400, -1)
             self.traffic_meta_moving_avg = (
@@ -534,11 +536,13 @@ class InterfuserAgent(autonomous_agent.AutonomousAgent):
         map_t2 = cv2.resize(map_t2, (200, 200))
 
 
-        if self.step % 2 != 0 and self.step > 4:
+        if self.step % self.skip_step != 0 and self.step > 4:
             control = self.prev_control
         else:
             self.prev_control = control
             self.prev_surround_map = surround_map
+        
+        self.prev_waypoints = pred_waypoints
 
         tick_data["map"] = self.prev_surround_map
         tick_data["map_t1"] = map_t1
