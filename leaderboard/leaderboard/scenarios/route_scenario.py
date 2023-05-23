@@ -460,7 +460,9 @@ class RouteScenario(BasicScenario):
             'Town04': 200,
             'Town05': 120,
             'Town06': 150,
+            'Town06_Opt': 150,
             'Town07': 110,
+            'Town07_Opt': 110,
             'Town08': 180,
             'Town09': 300,
             'Town10HD': 120, # town10 doesn't load properly for some reason
