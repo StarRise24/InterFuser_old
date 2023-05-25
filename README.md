@@ -1,3 +1,12 @@
+Branch overview:
+- `experiments/0.9.10`: Experiments done with CARLA version 0.9.10
+- `experiments/0.9.14`: Experiments done with CARLA version 0.9.14
+- `experiments/kia`: Experiments done with CARLA version 0.9.14 and custom Kia e-Niro sensor setup
+
+Original README:
+
+---
+
 # InterFuser: Safety-Enhanced Autonomous Driving Using Interpretable Sensor Fusion Transformer
 ![pipeline](assets/pipeline.png)
 > Hao Shao, Letian Wang, RuoBing Chen, Hongsheng Li, Yu Liu
