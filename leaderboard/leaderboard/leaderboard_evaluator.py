@@ -39,7 +39,7 @@ from leaderboard.autoagents.agent_wrapper import  AgentWrapper, AgentError
 from leaderboard.utils.statistics_manager import StatisticsManager
 from leaderboard.utils.route_indexer import RouteIndexer
 
-SAVE_PATH = os.environ.get("SAVE_PATH", 'eval')
+SAVE_PATH = os.environ.get("SAVE_PATH", None)
 
 sensors_to_icons = {
     'sensor.camera.rgb':        'carla_camera',
