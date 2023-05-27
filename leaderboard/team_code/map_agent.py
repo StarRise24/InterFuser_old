@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
+from leaderboard.autoagents import autonomous_agent
 from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 
 from team_code.base_agent import BaseAgent
@@ -8,6 +9,10 @@ from team_code.planner import RoutePlanner
 
 
 class MapAgent(BaseAgent):
+    def setup(self, path_to_conf_file):
+        super().setup(path_to_conf_file)
+        self.track = autonomous_agent.Track.MAP
+
     def sensors(self):
         result = super().sensors()
         # result.append(
