@@ -887,12 +887,11 @@ class AutoPilot(MapAgent):
 
     def destroy(self):
 
-        if CREATE_SCENARIO_ARCHIVES == 1:
+        if CREATE_SCENARIO_ARCHIVES == 1 and self.save_path is not None:
             print(f"Creating archive of {self.save_path}")
 
-            if self.save_path is not None:
-                with tarfile.open(str(self.save_path) + ".tar.gz", "w:gz") as tar:
-                    tar.add(str(self.save_path), arcname=os.path.basename(self.save_path))
+            with tarfile.open(str(self.save_path) + ".tar.gz", "w:gz") as tar:
+                tar.add(str(self.save_path), arcname=os.path.basename(self.save_path))
 
             print(f"Removing {self.save_path}")
             shutil.rmtree(self.save_path)
