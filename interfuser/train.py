@@ -968,7 +968,7 @@ def main():
         model = torch.jit.script(model)
 
     linear_scaled_lr = (
-        args.lr * args.batch_size * torch.distributed.get_world_size() / 512.0
+        args.lr * args.batch_size * args.world_size / 512.0
     )
     args.lr = linear_scaled_lr
     if args.with_backbone_lr:
@@ -979,7 +979,7 @@ def main():
         backbone_linear_scaled_lr = (
             args.backbone_lr
             * args.batch_size
-            * torch.distributed.get_world_size()
+            * args.world_size
             / 512.0
         )
         backbone_weights = []
