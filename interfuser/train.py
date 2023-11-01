@@ -1404,7 +1404,7 @@ def train_one_epoch(
             lrl = [param_group["lr"] for param_group in optimizer.param_groups]
             lr = sum(lrl) / len(lrl)
 
-            if args.distributed:
+            if True:
                 reduced_loss = reduce_tensor(loss.data, args.world_size)
                 losses_m.update(reduced_loss.item(), batch_size)
                 reduced_loss_traffic = reduce_tensor(loss_traffic.data, args.world_size)
@@ -1660,7 +1660,7 @@ def validate(
             )[0]
             stop_sign_error = accuracy(output[3], target[3])[0]
 
-            if args.distributed:
+            if True:
                 reduced_loss = reduce_tensor(loss.data, args.world_size)
                 reduced_loss_traffic = reduce_tensor(loss_traffic.data, args.world_size)
                 reduced_loss_velocity = reduce_tensor(
