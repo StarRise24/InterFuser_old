@@ -920,7 +920,7 @@ def main():
         bn_eps=args.bn_eps,
         scriptable=args.torchscript,
         checkpoint_path=args.initial_checkpoint,
-        freeze_num=args.freeze_num,
+        freeze_num=-1,
     )
 
     if args.local_rank == 0:
